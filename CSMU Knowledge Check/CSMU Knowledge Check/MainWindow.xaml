@@ -6,8 +6,22 @@
               params:Design.Theme="Dark"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
-              Title="MainWindow" Height="350" Width="525">
+              Title="CSMU Testing" Height="350" Width="525" Loaded="Window_Loaded_1">
     <Grid>
-        
+        <StackPanel>
+            <Label HorizontalAlignment="Center" Content="{Binding QuestName}"/>
+            <ListBox Name="selector" ItemsSource="{Binding}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Border BorderBrush="{x:Static metro:AccentBrushes.Blue}">
+                                <Image Source="{Binding ImageSource}" Height="80" Width="80"/>
+                            </Border>
+                            <TextBlock Text="{Binding Answer}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
     </Grid>
 </metro:Window>

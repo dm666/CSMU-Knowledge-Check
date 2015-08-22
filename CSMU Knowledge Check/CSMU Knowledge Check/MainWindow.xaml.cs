@@ -23,5 +23,28 @@ namespace CSMU_Knowledge_Check
         {
             InitializeComponent();
         }
+
+        private void Window_Loaded_1(object sender, RoutedEventArgs e)
+        {
+            CSMU cs = new CSMU();
+            List<CSMU> _un = new List<CSMU>();
+
+            selector.Items.Add(new CSMU()
+            {
+                QuestName = "Header",
+                Answer = "Blablabla",
+                ImageSource = @"D:\wowprogramm\wowicons\INV_Thrown_1H_FirelandsRaid_D_01.png"
+            }
+            );
+        }
+    }
+
+    public class CSMU
+    {
+        public CSMU() { }
+
+        public string QuestName { get; set; }
+        public string ImageSource { get; set; }
+        public string Answer { get; set; }
     }
 }
