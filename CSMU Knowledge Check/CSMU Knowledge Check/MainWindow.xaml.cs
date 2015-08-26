@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Elysium;
+using Elysium.Parameters;
 
 namespace CSMU_Knowledge_Check
 {
@@ -26,16 +28,20 @@ namespace CSMU_Knowledge_Check
 
         private void Window_Loaded_1(object sender, RoutedEventArgs e)
         {
-            CSMU cs = new CSMU();
-            List<CSMU> _un = new List<CSMU>();
+            this.Foreground = Elysium.AccentBrushes.Violet;
 
+            CSMU cs = new CSMU();
+            cs.QuestName = "Header";
+            Header.Content = cs.QuestName;
+
+            for(int i = 0; i < 5; i++)
             selector.Items.Add(new CSMU()
             {
-                QuestName = "Header",
                 Answer = "Blablabla",
                 ImageSource = @"D:\wowprogramm\wowicons\INV_Thrown_1H_FirelandsRaid_D_01.png"
             }
             );
+
         }
     }
 
