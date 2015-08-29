@@ -325,9 +325,47 @@ namespace CSMU_Knowledge_Check
                 if (!CFileMgr[entry].Correct.Contains(GetItemText(box)))
                     wrong++;
             }
-            else if (CFileMgr[entry].QuestType == 2) // multiple
+            else if (CFileMgr[entry].QuestType == 2 || CFileMgr[entry].QuestType == 3) // multiple, image
             {
+                if (box.SelectedItems.Count > 1)
+                {
+                    for (int i = 0; i < box.SelectedItems.Count; i++)
+                    {
+                        if (!CFileMgr[entry].Correct.Contains(GetItemsText(box, i)))
+                            wrong++;
+                    }
+                }
+
+                if (box.SelectedItems.Count == 1)
+                {
+                    if (!CFileMgr[entry].Correct.Contains(GetItemsText(box, box.SelectedIndex)))
+                        wrong = CFileMgr[entry].Correct.Count;
+                }
+
+                if (box.SelectedItems.Count == CFileMgr[entry].Answers.Count)
+                {
+                    ResultCollection.Add(entry, 0);
+                    return;
+                }
+
+                if (box.SelectedItems.Count == wrong)
+                    wrong = CFileMgr[entry].Correct.Count;
             }
+            else if (CFileMgr[entry].QuestType == 4)
+            {
+                ListBoxItem place = box.ItemContainerGenerator.ContainerFromIndex(0) as ListBoxItem;
+
+                TextBox value = FindFirstElementInVisualTree<TextBox>(place);
+
+                if (value.Text.ToLower() != CFileMgr[entry].ImageAnswer.ToLower())
+                    ResultCollection.Add(entry, 0);
+            }
+
+            UltimateResult = (CFileMgr[entry].Correct.Count - wrong);
+            UltimateResult /= CFileMgr[entry].Correct.Count;
+
+            ResultCollection.Add(entry, UltimateResult);
+            CFileMgr[entry]._time = ((60 - diff) == 0 ? 1 : (60 - diff));
         }
     }
 }
