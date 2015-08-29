@@ -17,7 +17,7 @@ namespace CSMU_Knowledge_Check
 {
     public class CSMU
     {
-        // begin variables
+        // begin vars
         private CFile CFileData;
 
         public Dictionary<int, CFile> CFileMgr;
@@ -25,16 +25,18 @@ namespace CSMU_Knowledge_Check
         public Dictionary<int, double> ResultCollection = new Dictionary<int, double>();
         // var questType not define. So, values: 1 - single, 2 - multiple, 3 - image, 4 - from image
 
+        // end vars
+
         public class CFile
         {
             public CFile()
             {
                 Answers = new List<string>();
                 Correct = new List<string>();
-                ImageSource = new List<string>();
             }
 
             public string Quest { get; set; }
+            public string HeaderImage { get; set; }
             public int QuestType { get; set; }
             public int NumberOfCorrect { get; set; }
 
@@ -42,11 +44,7 @@ namespace CSMU_Knowledge_Check
             public List<string> Correct { get; set; }
 
             public int _time;
-
-            public List<string> ImageSource { get; set; }
         }
-
-        // end variables
 
         public CSMU() { }
 
@@ -75,8 +73,9 @@ namespace CSMU_Knowledge_Check
                 CFileData = new CFile();
 
                 CFileData.Quest = rowData[0];
-                int type = int.Parse(rowData[1]);
-                CFileData.NumberOfCorrect = int.Parse(rowData[2]);
+                CFileData.HeaderImage = rowData[1];
+                int type = int.Parse(rowData[2]);
+                CFileData.NumberOfCorrect = int.Parse(rowData[3]);
 
                 switch (type)
                 {
@@ -127,18 +126,25 @@ namespace CSMU_Knowledge_Check
             return true;
         }
 
-        public void ToNextQuest(int rowId, ListBox selector, Label label)
+        public void ToNextQuest(int rowId, ListBox lb, Label field)
         {
             if (!CFileMgr.ContainsKey(rowId))
                 throw new Exception("Key not found.");
 
             int type = CFileMgr[rowId].QuestType;
 
-            label.Content = labelContent(CFileMgr[rowId].Quest, "");
+            field.Content = GetContent(CFileMgr[rowId].Quest, CFileMgr[rowId].HeaderImage);
 
+            if (type < 4)
+            {
+                for (int i = 0; i < CFileMgr[rowId].Answers.Count; i++)
+                    lb.Items.Add(addItem(type, CFileMgr[rowId].Answers[i]));
+            }
+            else if (type == 4) // empty text, see function below
+                lb.Items.Add(addItem(type));
         }
 
-        private object labelContent(string quest, string imgsource)
+        private object GetContent(string quest, string headerImage)
         {
             StackPanel p = new StackPanel() { Orientation = Orientation.Horizontal };
 
@@ -148,16 +154,21 @@ namespace CSMU_Knowledge_Check
                 Text = quest
             };
 
-            if (!string.IsNullOrEmpty(imgsource))
+            if (!string.IsNullOrEmpty(headerImage))
             {
-                Image img = new Image()
+                if (File.Exists(headerImage))
                 {
-                    Source = new BitmapImage(new Uri(imgsource)),
-                    Height = 120,
-                    Width = 120
-                };
+                    Image img = new Image()
+                    {
+                        Source = new BitmapImage(new Uri(headerImage)),
+                        Height = 120,
+                        Width = 120
+                    };
 
-                p.Children.Add(img);
+                    p.Children.Add(img);
+                }
+                else
+                    throw new Exception("Type 4? Image not found.");
             }
 
             p.Children.Add(block);
@@ -165,41 +176,89 @@ namespace CSMU_Knowledge_Check
             return p;
         }
 
-        private ListBoxItem addItem(int type, string ItemText, string imageSource)
+        private ListBoxItem addItem(int type, string ItemText = "")
         {
             StackPanel panel = new StackPanel() { Orientation = Orientation.Horizontal };
 
             if (type != 4)
             {
-                TextBlock block = new TextBlock()
+                if (type == 3)
                 {
-                    Text = ItemText,
-                    TextAlignment = TextAlignment.Center
-                };
+                    if (!string.IsNullOrEmpty(ItemText))
+                    {
+                        if (File.Exists(ItemText))
+                        {
+                            {
+                                Image img = new Image()
+                                {
+                                    Source = new BitmapImage(new Uri(ItemText)),
+                                    Height = 48,
+                                    Width = 48,
+                                };
 
-
-                Image img = new Image()
+                                panel.Children.Add(img);
+                            }
+                        }
+                    }
+                }
+                else
                 {
-                    Source = new BitmapImage(new Uri(imageSource)),
-                    Height = 48,
-                    Width = 48,
-                };
+                    TextBlock block = new TextBlock()
+                    {
+                        Text = ItemText,
+                        TextAlignment = TextAlignment.Left,
+                        FontSize = 24
+                    };
 
-                panel.Children.Add(img);
-                panel.Children.Add(block);
+                    panel.Children.Add(block);
+                }
             }
-            else if (type == 4) 
-            {
-                TextBox box = new TextBox()
-                {
-                    IsReadOnly = false,
-                    Text = ItemText
-                };
-
-                panel.Children.Add(box);
-            }
+            else
+                panel.Children.Add(new TextBox());
 
             return new ListBoxItem() { Content = panel };
+        }
+
+        private string GetItemText(ListBox box)
+        {
+                ListBoxItem l = box.SelectedItem as ListBoxItem;
+                TextBlock b = FindFirstElementInVisualTree<TextBlock>(l);
+
+                return b.Text;
+        }
+
+        private string GetItemsText(ListBox box, int index)
+        {
+            ListBoxItem l = box.SelectedItems[index] as ListBoxItem;
+
+            TextBlock b = FindFirstElementInVisualTree<TextBlock>(l);
+
+            return b.Text;
+        }
+
+        private T FindFirstElementInVisualTree<T>(DependencyObject parentElement) where T : DependencyObject
+        {
+            var count = VisualTreeHelper.GetChildrenCount(parentElement);
+            if (count == 0)
+                return null;
+
+            for (int i = 0; i < count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parentElement, i);
+
+                if (child != null && child is T)
+                {
+                    return (T)child;
+                }
+                else
+                {
+                    var result = FindFirstElementInVisualTree<T>(child);
+                    if (result != null)
+                        return result;
+
+                }
+            }
+            return null;
         }
 
         private Dictionary<int, CFile> Randomization(Dictionary<int, CFile> mgr)
@@ -242,39 +301,27 @@ namespace CSMU_Knowledge_Check
             return Security((Encoding.ASCII.GetBytes(encrypted)));
         }
 
-        public void Calculate()
+        public void CalculateAmount(int entry, ListBox box, int diff)
         {
-        }
+            if (!CFileMgr.ContainsKey(entry))
+                throw new Exception("Key not foud!");
 
-        private bool IsCorrect(string file)
-        {
-            // check file exist
-            if (!File.Exists(file))
-                return false;
+            int wrong = 0;
 
-            // file must contain minimum 2 rows
-            if (File.ReadAllLines(file).Length < 2)
+            if (box.SelectedItems.Count < 1)
             {
-                for (int i = 0; i < File.ReadAllLines(file).Length; i++)
-                {
-                    if (File.ReadAllLines(file)[i] == string.Empty)
-                    {
-                        // msgbox: quest in line [i] is empty, file contains max 1 row, return.
-                        return false;
-                    }
-                }
-                return false;
+                ResultCollection.Add(entry, 0);
+                return;
             }
 
-            List<string> rows = File.ReadAllLines(file).ToList();
-
-            foreach (var v in rows)
+            if (CFileMgr[entry].QuestType == 1) // single
             {
-                if (v.EndsWith(";"))
-                    v.Remove(v.Length - 1, 1);
+                if (!CFileMgr[entry].Correct.Contains(GetItemText(box)))
+                    wrong++;
             }
-
-            return true;
+            else if (CFileMgr[entry].QuestType == 2) // multiple
+            {
+            }
         }
     }
 }

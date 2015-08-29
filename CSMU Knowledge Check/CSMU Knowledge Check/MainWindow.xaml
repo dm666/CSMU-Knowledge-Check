@@ -6,26 +6,19 @@
               params:Design.Theme="Dark"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
-              Title="CSMU Testing" Foreground="#FF017BCD"  Height="350" Width="525" Loaded="Window_Loaded_1">
-    
+              Title="CSMU Testing" Foreground="#FF017BCD"  Height="571.875" Width="525" Loaded="Window_Loaded_1">
     <Grid>
-        <StackPanel>
-            <Label Name="Header" Height="48" Width="517" HorizontalContentAlignment="Center" Foreground="{x:Static metro:AccentBrushes.Violet}"/>
-            
-                <ListBox Name="selector" ItemsSource="{Binding}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Border BorderBrush="{x:Static metro:AccentBrushes.Blue}">
-                                    <Image Source="{Binding ImageSource}" Height="64" Width="64"/>
-                                </Border>
-                                <TextBlock Text="{Binding Answer}"/>
-                            <TextBox Text="DWA" Name="textBox"/>
-                        </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            
-        </StackPanel>
+        <Label Content="Label" Background="Aqua" HorizontalAlignment="Left" Height="120" VerticalAlignment="Top" Width="517"/>
+        <ListBox HorizontalAlignment="Left" Height="378" Margin="0,120,0,0" VerticalAlignment="Top" Width="517"/>
+        <StatusBar HorizontalAlignment="Left" Height="40" Margin="1,500,0,0" VerticalAlignment="Top" Width="370">
+            <StatusBarItem>
+                <TextBlock>BLA</TextBlock>
+            </StatusBarItem>
+            <Separator></Separator>
+            <StatusBar>
+                <ProgressBar Value="50" Height="21" Width="176"/>
+            </StatusBar>
+        </StatusBar>
+        <Button Content="Button" HorizontalAlignment="Left" Height="44" Margin="371,498,0,0" VerticalAlignment="Top" Width="146"/>
     </Grid>
 </metro:Window>

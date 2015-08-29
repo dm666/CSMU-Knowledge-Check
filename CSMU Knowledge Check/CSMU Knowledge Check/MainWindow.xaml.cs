@@ -30,7 +30,7 @@ namespace CSMU_Knowledge_Check
         {
             this.Foreground = Elysium.AccentBrushes.Violet;
 
-            CSMU2 cs = new CSMU2();
+         /*   CSMU2 cs = new CSMU2();
             cs.QuestName = "Header";
             Header.Content = cs.QuestName;
 
@@ -40,7 +40,7 @@ namespace CSMU_Knowledge_Check
                 Answer = "Blablabla",
                 ImageSource = @"D:\wowprogramm\wowicons\INV_Thrown_1H_FirelandsRaid_D_01.png"
             }
-            );
+            );*/
 
         }
     }
