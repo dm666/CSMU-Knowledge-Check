@@ -36,9 +36,10 @@ namespace CSMU_Knowledge_Check
             }
 
             public string Quest { get; set; }
-            public string HeaderImage { get; set; }
             public int QuestType { get; set; }
             public int NumberOfCorrect { get; set; }
+            public string HeaderImage { get; set; }
+            public string ImageAnswer { get; set; }
 
             public List<string> Answers { get; set; }
             public List<string> Correct { get; set; }
@@ -73,36 +74,33 @@ namespace CSMU_Knowledge_Check
                 CFileData = new CFile();
 
                 CFileData.Quest = rowData[0];
-                CFileData.HeaderImage = rowData[1];
-                int type = int.Parse(rowData[2]);
-                CFileData.NumberOfCorrect = int.Parse(rowData[3]);
+                int type = int.Parse(rowData[1]);
+                if (type == 4) // image 
+                    CFileData.HeaderImage = rowData[2];
+                else // or correct count
+                    CFileData.NumberOfCorrect = int.Parse(rowData[2]);
 
                 switch (type)
                 {
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        break;
-                    default:
-                        break;
+                    case 1: CFileData.QuestType = 1; break;
+                    case 2: CFileData.QuestType = 2; break;
+                    case 3: CFileData.QuestType = 3; break;
+                    case 4: CFileData.QuestType = 4; break;
+                    default: break;
                 }
 
                 int lastIndex = rowData.Count - 1;
                 int firstIndex = rowData.Count - CFileData.NumberOfCorrect;
 
-                if (type < 3 && type > 0)
+                if (type < 4 && type > 0)
                 {
-                    if (type == 1)
-                        CFileData.Correct.Add(rowData[lastIndex]);
-                    else if (type == 2) // multiple
-                    {
+                 //   if (type == 1)
+                   //     CFileData.Correct.Add(rowData[lastIndex]);
+                 //   else if (type == 2) // multiple
+                 //   {
                         for (int index = lastIndex; index >= firstIndex; index--)
                             CFileData.Correct.Add(rowData[index]);
-                    }
+                //    }
 
                     rowData.RemoveRange(firstIndex, CFileData.NumberOfCorrect);
                     rowData.RemoveRange(0, 3);
@@ -111,10 +109,9 @@ namespace CSMU_Knowledge_Check
 
                     CFileData.Answers = rowData.OrderBy(sort => randomSorting.Next()).ToList();
                 }
-                else if (type == 3) // image
-                {
-                }
-                else if (type > 4) // unknown, return false!
+                else if (type == 4) // image
+                    CFileData.ImageAnswer = rowData[3];
+                else if (type > 5) // unknown, return false!
                 {
                 }
 
@@ -178,6 +175,8 @@ namespace CSMU_Knowledge_Check
 
         private ListBoxItem addItem(int type, string ItemText = "")
         {
+            ListBoxItem item = new ListBoxItem();
+
             StackPanel panel = new StackPanel() { Orientation = Orientation.Horizontal };
 
             if (type != 4)
@@ -214,9 +213,16 @@ namespace CSMU_Knowledge_Check
                 }
             }
             else
+            {
+                Color c = Color.FromRgb(23, 23, 23);
+                SolidColorBrush backgroundBrush = new SolidColorBrush(c);
+                item.Background = backgroundBrush;
                 panel.Children.Add(new TextBox());
+            }
 
-            return new ListBoxItem() { Content = panel };
+            item.Content = panel;
+
+            return item;
         }
 
         private string GetItemText(ListBox box)
