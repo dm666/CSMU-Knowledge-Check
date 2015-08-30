@@ -53,7 +53,7 @@ namespace CSMU_Knowledge_Check
         {
             if (!File.Exists(_file))
             {
-                // msgbox.... blabla bla
+                MessageBox.Show("Failed to load file " + _file);
                 return false;
             }
 
@@ -366,6 +366,35 @@ namespace CSMU_Knowledge_Check
 
             ResultCollection.Add(entry, UltimateResult);
             CFileMgr[entry]._time = ((60 - diff) == 0 ? 1 : (60 - diff));
+        }
+
+        public string GetPercentOfQuestByEntry(int questId)
+        {
+            if (!CFileMgr.ContainsKey(questId))
+                throw new Exception("Key not found.");
+
+            return string.Format("{0:0.0%}", ResultCollection[questId]);
+        }
+
+        public double Result()
+        {
+            double length = 0;
+
+            for (int i = 0; i < ResultCollection.Count; i++)
+            {
+                if (!ResultCollection.ContainsKey(i))
+                    continue;
+
+                length += ResultCollection[i];
+            }
+
+            double res = length / CFileMgr.Count;
+            return res;
+        }
+
+        public string OverallResult()
+        {
+            return string.Format("{0:0.0%}", Result());
         }
     }
 }
