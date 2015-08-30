@@ -1,0 +1,13 @@
+﻿<metro:Window x:Class="CSMU_Knowledge_Check.ScreenResult"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:metro="http://schemas.codeplex.com/elysium"
+              xmlns:params="http://schemas.codeplex.com/elysium/params"
+              params:Design.Theme="Dark"
+              params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
+              params:Design.ContrastBrush="White"
+              Title="ScreenResult" Height="300" Width="300">
+    <Grid>
+        
+    </Grid>
+</metro:Window>
