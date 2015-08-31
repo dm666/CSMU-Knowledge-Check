@@ -22,5 +22,51 @@ namespace CSMU_Knowledge_Check
         {
             InitializeComponent();
         }
+
+        private void LoadingData(CSMU Mgr, int index)
+        {
+            List<ResultTable> source = new List<ResultTable>();
+
+            for (int i = 0; i < Mgr.CFileMgr.Count; i++)
+            {
+                if (!Mgr.CFileMgr.ContainsKey(i))
+                    continue;
+
+                source.Add(new ResultTable(Mgr.CFileMgr[i].Quest,
+                    Mgr.GetPercentOfQuestByEntry(i),
+                    Mgr.CFileMgr[i]._time));
+            }
+
+            source.Add(new ResultTable("Итог теста", Mgr.Result()));
+
+            table.ItemsSource = source;
+
+            foreach (ResultTable s in table.ItemsSource)
+            {
+                var row = table.ItemContainerGenerator.ContainerFromItem(s) as DataGridRow;
+
+                if (s.percent >= 0.7)
+                    row.Background = Brushes.Green;
+                else if (s.quest == "Итог теста")
+                {
+                }
+                else
+                    row.Background = Brushes.Red;
+            }
+        }
+    }
+
+    public class ResultTable
+    {
+        public ResultTable(string _quest, double _percent, int _time = 0)
+        {
+            this.quest = _quest;
+            this.percent = _percent;
+            this.time = _time;
+        }
+
+        public string quest { get; set; }
+        public double percent { get; set; }
+        public int time { get; set; }
     }
 }

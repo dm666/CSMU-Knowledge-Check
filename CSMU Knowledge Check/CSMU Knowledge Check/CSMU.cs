@@ -368,12 +368,12 @@ namespace CSMU_Knowledge_Check
             CFileMgr[entry]._time = ((60 - diff) == 0 ? 1 : (60 - diff));
         }
 
-        public string GetPercentOfQuestByEntry(int questId)
+        public double GetPercentOfQuestByEntry(int questId)
         {
             if (!CFileMgr.ContainsKey(questId))
                 throw new Exception("Key not found.");
 
-            return string.Format("{0:0.0%}", ResultCollection[questId]);
+            return Convert.ToDouble(string.Format("{0:0.0}", ResultCollection[questId]));
         }
 
         public double Result()

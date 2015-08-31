@@ -6,8 +6,9 @@
               params:Design.Theme="Dark"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
-              Title="ScreenResult" Height="300" Width="300">
+              Title="ScreenResult" Height="317" Width="372">
     <Grid>
-        
+        <DataGrid Name="table" HorizontalAlignment="Left" Height="249" VerticalAlignment="Top" Width="364"/>
+        <Button Content="Закрыть" HorizontalAlignment="Left" Height="38" Margin="241,249,0,0" VerticalAlignment="Top" Width="123"/>
     </Grid>
 </metro:Window>
