@@ -6,8 +6,9 @@
               params:Design.Theme="Dark"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
-              Title="QuestList" Height="300" Width="300">
+              Title="QuestList" Height="276.689" Width="306.081" Loaded="Loading">
     <Grid>
-        
+        <ListBox Name="questList" HorizontalAlignment="Left" Height="247" VerticalAlignment="Top" Width="298" KeyDown="Search"/>
+
     </Grid>
 </metro:Window>
