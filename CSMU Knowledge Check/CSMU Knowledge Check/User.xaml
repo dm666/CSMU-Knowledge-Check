@@ -6,8 +6,14 @@
               params:Design.Theme="Dark"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
-              Title="User" Height="300" Width="300">
+              Title="User" Height="227" Width="197">
     <Grid>
-        
+        <TextBox HorizontalAlignment="Left" Height="32" Margin="10,48,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="162"/>
+        <TextBox HorizontalAlignment="Left" Height="34" Margin="10,116,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="162"/>
+        <Label Name="Student" Content="Ф.И.О" HorizontalAlignment="Left" Height="33" Margin="10,10,0,0" VerticalAlignment="Top" Width="166"/>
+        <Label Name="Group" Content="Группа" HorizontalAlignment="Left" Height="26" Margin="10,85,0,0" VerticalAlignment="Top" Width="166"/>
+        <Button Content="Начать" HorizontalAlignment="Left" Height="32" Margin="103,155,0,0" VerticalAlignment="Top" Width="69" Click="Start"/>
+        <Button Content="Отмена" HorizontalAlignment="Left" Height="32" Margin="10,155,0,0" VerticalAlignment="Top" Width="69" Click="Cancel"/>
+
     </Grid>
 </metro:Window>

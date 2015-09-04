@@ -8,7 +8,6 @@
               params:Design.ContrastBrush="White"
               Title="QuestList" Height="276.689" Width="306.081" Loaded="Loading">
     <Grid>
-        <ListBox Name="questList" HorizontalAlignment="Left" Height="247" VerticalAlignment="Top" Width="298" KeyDown="Search"/>
-
+        <ListBox Name="questList" HorizontalAlignment="Left" Height="247" VerticalAlignment="Top" Width="298" KeyDown="Search" MouseDoubleClick="Selected"/>
     </Grid>
 </metro:Window>

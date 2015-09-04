@@ -6,19 +6,12 @@
               params:Design.Theme="Dark"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
-              Title="CSMU Testing" Foreground="#FF017BCD"  Height="571.875" Width="525" Loaded="Window_Loaded_1">
-    <Grid>
-        <Label Content="Label" Background="Aqua" HorizontalAlignment="Left" Height="120" VerticalAlignment="Top" Width="517"/>
-        <ListBox HorizontalAlignment="Left" Height="378" Margin="0,120,0,0" VerticalAlignment="Top" Width="517"/>
-        <StatusBar HorizontalAlignment="Left" Height="40" Margin="1,500,0,0" VerticalAlignment="Top" Width="370">
-            <StatusBarItem>
-                <TextBlock>BLA</TextBlock>
-            </StatusBarItem>
-            <Separator></Separator>
-            <StatusBar>
-                <ProgressBar Value="50" Height="21" Width="176"/>
-            </StatusBar>
-        </StatusBar>
-        <Button Content="Button" HorizontalAlignment="Left" Height="44" Margin="371,498,0,0" VerticalAlignment="Top" Width="146"/>
+              Title="CSMU Testing" Foreground="#FF017BCD"  Height="562.875" Width="525" Loaded="Window_Loaded_1">
+    <Grid Margin="0,0,0,1">
+        <Label Name="field" Content="Label" HorizontalAlignment="Left" Height="120" VerticalAlignment="Top" Width="517"/>
+        <ListBox Name="box" HorizontalAlignment="Left" Height="378" Margin="0,120,0,0" VerticalAlignment="Top" Width="517"/>
+        <Button Content="Button" HorizontalAlignment="Left" Height="34" Margin="371,498,0,0" VerticalAlignment="Top" Width="146" Click="Next"/>
+        <Label Name="counter"  Content="Label" HorizontalAlignment="Left" Height="34" Margin="0,498,0,0" VerticalAlignment="Top" Width="190"/>
+        <ProgressBar Name="bar" HorizontalAlignment="Left" Height="34" Margin="190,498,0,0" VerticalAlignment="Top" Width="181"/>
     </Grid>
 </metro:Window>

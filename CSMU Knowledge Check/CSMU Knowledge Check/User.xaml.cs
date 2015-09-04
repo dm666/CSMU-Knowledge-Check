@@ -22,5 +22,21 @@ namespace CSMU_Knowledge_Check
         {
             InitializeComponent();
         }
+
+        private void Loading(object sender, RoutedEventArgs e)
+        {
+            QList = this.Owner as QuestList;
+        }
+
+        QuestList QList;
+
+        private void Start(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void Cancel(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Elysium;
 using Elysium.Parameters;
 
@@ -26,31 +27,39 @@ namespace CSMU_Knowledge_Check
             InitializeComponent();
         }
 
+        DispatcherTimer timer;
+        public CSMU data = new CSMU();
+        public int rowId, diff, SECOND = 1000;
+        public string Student, Group;
+
         private void Window_Loaded_1(object sender, RoutedEventArgs e)
         {
             this.Foreground = Elysium.AccentBrushes.Violet;
-
-         /*   CSMU2 cs = new CSMU2();
-            cs.QuestName = "Header";
-            Header.Content = cs.QuestName;
-
-            for(int i = 0; i < 5; i++)
-            selector.Items.Add(new CSMU2()
-            {
-                Answer = "Blablabla",
-                ImageSource = @"D:\wowprogramm\wowicons\INV_Thrown_1H_FirelandsRaid_D_01.png"
-            }
-            );*/
-
+            timer = new DispatcherTimer();
         }
-    }
 
-    public class CSMU2
-    {
-        public CSMU2() { }
+        private void Next(object sender, RoutedEventArgs e)
+        {
+            data.CalculateAmount(rowId, box, diff);
+            if (rowId < data.CFileMgr.Count)
+            {
+                resetTime();
+                rowId++;
+                data.ToNextQuest(rowId, box, field);
+                counter.Content = string.Format("Вопрос {0} из {1}.", rowId, data.CFileMgr.Count);
+            }
+            else
+                Table();
+        }
 
-        public string QuestName { get; set; }
-        public string ImageSource { get; set; }
-        public string Answer { get; set; }
+        private void resetTime()
+        {
+            timer.Stop();
+            bar.Value = 0;
+
+            timer.Start();
+        }
+
+        private void Table() { }
     }
 }

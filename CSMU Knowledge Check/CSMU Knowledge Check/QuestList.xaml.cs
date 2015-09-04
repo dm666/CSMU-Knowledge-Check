@@ -24,20 +24,29 @@ namespace CSMU_Knowledge_Check
             InitializeComponent();
         }
 
+        public MainWindow _MainWindow;
+        private User _User;
+        public string msg = "";
+        string[] files;
+
         private void Loading(object sender, RoutedEventArgs e)
         {
             string path = @"Вопросы\";
 
             if (!Directory.Exists(path))
-                throw new Exception("Директория с вопросами не найдена.");
+                throw new Exception("Директория " + path + " не найдена.");
 
-            string[] files = Directory.GetFileSystemEntries(path, "*.csmu");
+            files = Directory.GetFileSystemEntries(path, "*.csmu");
 
             if (files.Length < 1)
                 throw new Exception("Не найдено ни одного тестового задания.");
 
             for (int i = 0; i < files.Length; i++)
                 questList.Items.Add(System.IO.Path.GetFileNameWithoutExtension(files[i]));
+
+            _MainWindow = new MainWindow();
+            _User = new User();
+            _User.Owner = this;
         }
 
         private void Search(object sender, KeyEventArgs e)
@@ -49,6 +58,18 @@ namespace CSMU_Knowledge_Check
                     questList.SelectedItem = i;
                     break;
                 }
+            }
+        }
+
+        private void Selected(object sender, MouseButtonEventArgs e)
+        {
+            if (files.Length < 1)
+                throw new Exception();
+
+            if (_MainWindow != null && _User != null)
+            {
+                _MainWindow.Title = ((ListBox)sender).SelectedItem.ToString();
+                _User.ShowDialog();
             }
         }
     }
