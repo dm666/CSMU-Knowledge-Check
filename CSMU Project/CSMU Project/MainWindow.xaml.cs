@@ -23,5 +23,11 @@ namespace CSMU_Project
         {
             InitializeComponent();
         }
+
+        public string student, group;
+
+        public class CSMUFile
+        {
+        }
     }
 }

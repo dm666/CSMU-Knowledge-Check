@@ -22,5 +22,24 @@ namespace CSMU_Project
         {
             InitializeComponent();
         }
+
+        QuestList QuestLst;
+
+        private void StartUp(object sender, RoutedEventArgs e)
+        {
+            QuestLst = this.Owner as QuestList;
+        }
+
+        private void Begin_Click(object sender, RoutedEventArgs e)
+        {
+            if (QuestLst.window != null)
+            {
+            }
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
