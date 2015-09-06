@@ -12,6 +12,7 @@
         <ListBox Name="box" HorizontalAlignment="Left" Height="378" Margin="0,120,0,0" VerticalAlignment="Top" Width="517"/>
         <Button Content="Button" HorizontalAlignment="Left" Height="34" Margin="371,498,0,0" VerticalAlignment="Top" Width="146" Click="Next"/>
         <Label Name="counter"  Content="Label" HorizontalAlignment="Left" Height="34" Margin="0,498,0,0" VerticalAlignment="Top" Width="190"/>
-        <ProgressBar Name="bar" HorizontalAlignment="Left" Height="34" Margin="190,498,0,0" VerticalAlignment="Top" Width="181"/>
+        <ProgressBar Name="bar" HorizontalAlignment="Left" Height="34" Margin="190,498,0,0" VerticalAlignment="Top" Width="181" Maximum="60"/>
+        <TextBlock Name="percent" HorizontalAlignment="Left" Height="19" Margin="236,505,0,0" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Top" Width="93"/>
     </Grid>
 </metro:Window>

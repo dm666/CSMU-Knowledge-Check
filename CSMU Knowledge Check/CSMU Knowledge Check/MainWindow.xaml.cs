@@ -27,7 +27,7 @@ namespace CSMU_Knowledge_Check
             InitializeComponent();
         }
 
-        DispatcherTimer timer;
+        public DispatcherTimer timer = new DispatcherTimer();
         public CSMU data = new CSMU();
         public int rowId, diff, SECOND = 1000;
         public string Student, Group;
@@ -35,7 +35,15 @@ namespace CSMU_Knowledge_Check
         private void Window_Loaded_1(object sender, RoutedEventArgs e)
         {
             this.Foreground = Elysium.AccentBrushes.Violet;
-            timer = new DispatcherTimer();
+            this.box.SelectionMode = SelectionMode.Multiple;
+
+            QuestList l = new QuestList();
+            l.Owner = this;
+            l.Show();
+
+            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Tick += timer_Tick;
+            timer.IsEnabled = false;
         }
 
         private void Next(object sender, RoutedEventArgs e)
@@ -52,6 +60,62 @@ namespace CSMU_Knowledge_Check
                 Table();
         }
 
+        private string timeLeft(int second)
+        {
+            string value = "";
+
+            switch (second % 10)
+            {
+                case 1:
+                    value = "секунда";
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                    value = "секунды";
+                    break;
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 0:
+                    value = "секунд";
+                    break;
+            }
+
+            return string.Format("Осталось {0} {1}", second, value);
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            if (bar.Value == bar.Maximum)
+                timer.IsEnabled = false;
+
+            diff = (int)(bar.Maximum - bar.Value) / SECOND;
+
+            if (diff > 0)
+            {
+                percent.Text = timeLeft(diff);
+              //  bar.Value += Convert.ToDouble(timer.Interval);
+            }
+            else
+            {
+                percent.Text = "Time is gone!";
+                data.CalculateAmount(rowId, box, diff);
+
+                if (rowId < data.CFileMgr.Count)
+                {
+                    resetTime();
+                    rowId++;
+                    data.ToNextQuest(rowId, box, field);
+                    counter.Content = string.Format("Вопрос {0} из {1}.", rowId, data.CFileMgr.Count);
+                }
+                else
+                    Table();
+            }
+        }
+
         private void resetTime()
         {
             timer.Stop();
@@ -60,6 +124,15 @@ namespace CSMU_Knowledge_Check
             timer.Start();
         }
 
-        private void Table() { }
+        private void Table() 
+        {
+            timer.Stop();
+
+            ScreenResult result = new ScreenResult();
+            result.Owner = this;
+            result.ShowDialog();
+
+            this.Visibility = System.Windows.Visibility.Hidden;
+        }
     }
 }

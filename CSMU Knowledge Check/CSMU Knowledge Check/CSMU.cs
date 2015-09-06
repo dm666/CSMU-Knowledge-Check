@@ -128,6 +128,9 @@ namespace CSMU_Knowledge_Check
             if (!CFileMgr.ContainsKey(rowId))
                 throw new Exception("Key not found.");
 
+            lb.Items.Clear();
+            field.Content = "";
+
             int type = CFileMgr[rowId].QuestType;
 
             field.Content = GetContent(CFileMgr[rowId].Quest, CFileMgr[rowId].HeaderImage);
@@ -271,9 +274,9 @@ namespace CSMU_Knowledge_Check
         {
             var random = new Random();
 
-            for (int i = mgr.Count; i > 0; i--)
+            for (int i = mgr.Count - 1; i > 0; i--)
             {
-                int j = random.Next();
+                int j = random.Next(0, i);
                 var t = mgr[i];
                 mgr[i] = mgr[j];
                 mgr[j] = t;

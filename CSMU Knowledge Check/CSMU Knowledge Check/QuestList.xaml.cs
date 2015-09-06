@@ -44,7 +44,8 @@ namespace CSMU_Knowledge_Check
             for (int i = 0; i < files.Length; i++)
                 questList.Items.Add(System.IO.Path.GetFileNameWithoutExtension(files[i]));
 
-            _MainWindow = new MainWindow();
+            _MainWindow = this.Owner as MainWindow;
+
             _User = new User();
             _User.Owner = this;
         }
@@ -68,6 +69,7 @@ namespace CSMU_Knowledge_Check
 
             if (_MainWindow != null && _User != null)
             {
+                msg = files[questList.SelectedIndex];
                 _MainWindow.Title = ((ListBox)sender).SelectedItem.ToString();
                 _User.ShowDialog();
             }

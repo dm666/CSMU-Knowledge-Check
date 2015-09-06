@@ -23,7 +23,24 @@ namespace CSMU_Knowledge_Check
             InitializeComponent();
         }
 
-        private void LoadingData(CSMU Mgr, int index)
+        MainWindow window;
+
+        private void Loaded(object sender, RoutedEventArgs e)
+        {
+            this.ResizeMode = System.Windows.ResizeMode.NoResize;
+            this.Background = new SolidColorBrush(Color.FromRgb(23, 23, 23));
+
+            window = this.Owner as MainWindow;
+
+            if (window != null)
+            {
+                LoadingData(window.data);
+
+                this.Title = string.Format("Результаты тестирования - [студент {0}]", window.Student);
+            }
+        }
+
+        private void LoadingData(CSMU Mgr)
         {
             List<ResultTable> source = new List<ResultTable>();
 
@@ -53,6 +70,11 @@ namespace CSMU_Knowledge_Check
                 else
                     row.Background = Brushes.Red;
             }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 

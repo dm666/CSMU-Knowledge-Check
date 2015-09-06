@@ -21,6 +21,8 @@ namespace CSMU_Knowledge_Check
         public User()
         {
             InitializeComponent();
+
+            //QList = this.Owner as QuestList;
         }
 
         private void Loading(object sender, RoutedEventArgs e)
@@ -32,6 +34,35 @@ namespace CSMU_Knowledge_Check
 
         private void Start(object sender, RoutedEventArgs e)
         {
+            if (QList != null)
+            {
+                if (QList._MainWindow != null)
+                {
+                    if (Student.Text.Length < 1 || Group.Text.Length < 1)
+                    {
+                        MessageBox.Show("Заполните все поля.");
+                        return;
+                    }
+
+                    QList._MainWindow.Student = Student.Text;
+                    QList._MainWindow.Group = Group.Text;
+
+                    if (QList._MainWindow.data != null)
+                    {
+                        QList._MainWindow.rowId = 0;
+                        QList._MainWindow.data.Loading(QList.msg);
+                        QList._MainWindow.data.ToNextQuest(QList._MainWindow.rowId,
+                            QList._MainWindow.box,
+                            QList._MainWindow.field);
+                        QList._MainWindow.counter.Content = string.Format("Вопрос 1 из {0}.",
+                            QList._MainWindow.data.CFileMgr.Count);
+                    //    QList._MainWindow.timer.IsEnabled = true;
+                    }
+
+                    this.Close();
+                    QList.Close();
+                }
+            }
         }
 
         private void Cancel(object sender, RoutedEventArgs e)
