@@ -40,13 +40,58 @@ namespace CSMU_Project
             box.Items.Clear();
 
             if (CSMUFileMgr[rowId].questType == QuestType.TextingImage)
-                SetQuestField(QuestField, CSMUFileMgr[rowId].Quest,
-                    true, CSMUFileMgr[rowId].HeaderImage);
+                box.Items.Add(AddItemWithTextImage(CSMUFileMgr[rowId].Quest, CSMUFileMgr[rowId].HeaderImage));
             else
-                SetQuestField(QuestField, CSMUFileMgr[rowId].Quest, false);
+            {
+                SetQuestField(QuestField, CSMUFileMgr[rowId].Quest);
 
+                for (int i = 0; i < CSMUFileMgr[rowId].Answers.Count; i++)
+                    box.Items.Add(AddItemWithoutImage(CSMUFileMgr[rowId].questType, CSMUFileMgr[rowId].Answers[i]));
+            }
+        }
 
+        private ListBoxItem AddItemWithTextImage(string quest, string header)
+        {
+            if (File.Exists(header))
+                throw new Exception("File not found.");
 
+            ListBoxItem item = new ListBoxItem();
+
+            StackPanel p = new StackPanel() { Orientation = Orientation.Horizontal };
+            StackPanel p2 = new StackPanel() { Orientation = Orientation.Horizontal };
+
+            TextBlock field = new TextBlock()
+            {
+                Text = quest,
+                TextAlignment = TextAlignment.Left,
+                Height = 45,
+                Width = box.Width - 100
+            };
+
+            Image img = new Image()
+            {
+                Source = new BitmapImage(new Uri(header)),
+                Height = 100,
+                Width = 100
+            };
+
+            p2.Children.Add(field);
+            p2.Children.Add(img);
+
+            QuestField.Content = p2;
+
+            TextBox iBox = new TextBox()
+            {
+                TextAlignment = TextAlignment.Left,
+                Height = 45,
+                Width = box.Width
+            };
+
+            p.Children.Add(iBox);
+
+            item.Content = p;
+
+            return item;
         }
 
         private ListBoxItem AddItemWithoutImage(QuestType iType, string ItemText)
@@ -55,20 +100,48 @@ namespace CSMU_Project
 
             StackPanel panel = new StackPanel() { Orientation = Orientation.Horizontal };
 
-            if (iType == QuestType.Multiple)
+            if (iType == QuestType.Multiple || iType == QuestType.Single)
             {
+                TextBlock block = new TextBlock()
+                {
+                    Text = ItemText,
+                    TextAlignment = TextAlignment.Left,
+                    Height = 45,
+                    Width = box.Width
+                };
+
+                panel.Children.Add(block);
             }
             else if (iType == QuestType.ChoiceImage)
             {
+                if (!File.Exists(ItemText))
+                    throw new Exception("Файл не найден.");
+
+                Image img = new Image()
+                {
+                    Source = new BitmapImage(new Uri(ItemText)),
+                    Height = 72,
+                    Width = 72,
+                };
+
+                TextBlock block = new TextBlock()
+                {
+                    Text = ItemText,
+                    TextAlignment = TextAlignment.Left,
+                    Height = 45,
+                    Width = box.Width
+                };
+
+                panel.Children.Add(img);
+                panel.Children.Add(block);
             }
-            else if (iType == QuestType.Single)
-            {
-            }
+
+            Item.Content = panel;
 
             return Item;
         }
 
-        private void SetQuestField(Label questField, string quest, bool isImage, string hImg = "")
+        private void SetQuestField(Label questField, string quest)
         {
             StackPanel panel = new StackPanel() { Orientation = Orientation.Horizontal };
 
@@ -81,24 +154,6 @@ namespace CSMU_Project
             };
 
             panel.Children.Add(main);
-
-            if (isImage)
-            {
-                if (hImg != string.Empty || File.Exists(hImg))
-                {
-                    Image img = new Image()
-                    {
-                        Source = new BitmapImage(new Uri(hImg)),
-                        Height = 100,
-                        Width = 100,
-                        HorizontalAlignment = System.Windows.HorizontalAlignment.Right,
-                    };
-
-                    panel.Children.Add(img);
-                }
-                else
-                    throw new Exception("Error loading image.");
-            }
 
             questField.Content = panel;
         }
