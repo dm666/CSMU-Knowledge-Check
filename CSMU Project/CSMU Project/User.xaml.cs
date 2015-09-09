@@ -32,8 +32,26 @@ namespace CSMU_Project
 
         private void Begin_Click(object sender, RoutedEventArgs e)
         {
-            if (QuestLst.window != null)
+            if (QuestLst != null)
             {
+                if (QuestLst.window != null)
+                {
+                    if (student.Text.Length < 1 || group.Text.Length < 1)
+                    {
+                        MessageBox.Show("Заполните все поля.");
+                        return;
+                    }
+
+                    QuestLst.window.student = student.Text;
+                    QuestLst.window.group = group.Text;
+
+                    QuestLst.window.LoadingQuery(QuestLst.selectedFile);
+                    QuestLst.window.NextQuest(QuestLst.window.rowId);
+                    QuestLst.window.Status.Content = string.Format("1 вопрос из {0}", QuestLst.window.CSMUFileMgr.Count);
+
+                    QuestLst.Close();
+                    this.Close();
+                }
             }
         }
 

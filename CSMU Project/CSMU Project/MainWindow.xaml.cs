@@ -26,6 +26,9 @@ namespace CSMU_Project
         }
 
         public string student, group;
+        public int rowId = 0;
+        public Dictionary<int, double> ResultCollection = new Dictionary<int,double>();
+        public double UltimateResult;
 
         public void NextQuest(int rowId)
         {
@@ -48,6 +51,99 @@ namespace CSMU_Project
                 for (int i = 0; i < CSMUFileMgr[rowId].Answers.Count; i++)
                     box.Items.Add(AddItemWithoutImage(CSMUFileMgr[rowId].questType, CSMUFileMgr[rowId].Answers[i]));
             }
+        }
+
+        private void CalculateAmount(int id, int diff)
+        {
+            if (!CSMUFileMgr.ContainsKey(id))
+                throw new Exception("Key " + id + " not found.");
+
+            int Wrong = 0;
+
+            if (box.SelectedItems.Count < 1)
+            {
+                ResultCollection.Add(id, 0.0);
+                return;
+            }
+
+            if (CSMUFileMgr[id].questType == QuestType.Single)
+            {
+                if (!CSMUFileMgr[id].corrected.Contains(GetItemText(box.SelectedIndex, QuestType.Single)))
+                    Wrong++;
+            }
+            else if (CSMUFileMgr[id].questType == QuestType.Multiple || CSMUFileMgr[id].questType == QuestType.ChoiceImage)
+            {
+                if (box.SelectedItems.Count > 1)
+                {
+                    for (int i = 0; i < box.SelectedItems.Count; i++)
+                    {
+                        if (!CSMUFileMgr[id].corrected.Contains(GetItemText(i, CSMUFileMgr[id].questType)))
+                            Wrong++;
+                    }
+                }
+
+                if (box.SelectedItems.Count == 1)
+                {
+                    if (!CSMUFileMgr[id].corrected.Contains(GetItemText(box.SelectedIndex, CSMUFileMgr[id].questType)))
+                        Wrong = CSMUFileMgr[id].corrected.Count;
+                }
+
+                if (box.SelectedItems.Count == CSMUFileMgr[id].Answers.Count)
+                {
+                    ResultCollection.Add(id, 0);
+                    return;
+                }
+
+                if (box.SelectedItems.Count == Wrong)
+                    Wrong = CSMUFileMgr[id].corrected.Count;
+            }
+            else if (CSMUFileMgr[id].questType == QuestType.TextingImage)
+            {
+                ListBoxItem i = box.ItemContainerGenerator.ContainerFromIndex(0) as ListBoxItem;
+
+                TextBox value = FindFirstElementInVisualTree<TextBox>(i);
+
+                if (value.Text.ToLower() != CSMUFileMgr[id].ImageAnswer.ToLower())
+                {
+                    ResultCollection.Add(id, 0.0);
+                    return;
+                }
+            }
+
+            UltimateResult = (CSMUFileMgr[id].corrected.Count - Wrong);
+            UltimateResult /= CSMUFileMgr[id].corrected.Count;
+
+            ResultCollection.Add(id, UltimateResult);
+            CSMUFileMgr[id].Time = ((60 - diff) == 0 ? 1 : (60 - diff));
+        }
+
+        public double GetPercentOfQuestByEntry(int questId)
+        {
+            if (!CSMUFileMgr.ContainsKey(questId))
+                throw new Exception("Key not found.");
+
+            return Convert.ToDouble(string.Format("{0:0.0}", ResultCollection[questId]));
+        }
+
+        public double Result()
+        {
+            double length = 0;
+
+            for (int i = 0; i < ResultCollection.Count; i++)
+            {
+                if (!ResultCollection.ContainsKey(i))
+                    continue;
+
+                length += ResultCollection[i];
+            }
+
+            double res = length / CSMUFileMgr.Count;
+            return res;
+        }
+
+        public string OverallResult()
+        {
+            return string.Format("{0:0.0%}", Result());
         }
 
         private ListBoxItem AddItemWithTextImage(string quest, string header)
@@ -101,17 +197,7 @@ namespace CSMU_Project
             StackPanel panel = new StackPanel() { Orientation = Orientation.Horizontal };
 
             if (iType == QuestType.Multiple || iType == QuestType.Single)
-            {
-                TextBlock block = new TextBlock()
-                {
-                    Text = ItemText,
-                    TextAlignment = TextAlignment.Left,
-                    Height = 45,
-                    Width = box.Width
-                };
-
-                panel.Children.Add(block);
-            }
+                Item.Content = ItemText;
             else if (iType == QuestType.ChoiceImage)
             {
                 if (!File.Exists(ItemText))
@@ -134,9 +220,9 @@ namespace CSMU_Project
 
                 panel.Children.Add(img);
                 panel.Children.Add(block);
-            }
 
-            Item.Content = panel;
+                Item.Content = panel;
+            }
 
             return Item;
         }
@@ -156,6 +242,41 @@ namespace CSMU_Project
             panel.Children.Add(main);
 
             questField.Content = panel;
+        }
+
+        private string GetItemText(int index, QuestType iType)
+        {
+            ListBoxItem item = box.SelectedItems[index] as ListBoxItem;
+
+            if (iType == QuestType.Multiple)
+                return item.Content.ToString();
+            else
+                return FindFirstElementInVisualTree<TextBlock>(item).Text;
+        }
+
+        private T FindFirstElementInVisualTree<T>(DependencyObject parentElement) where T : DependencyObject
+        {
+            var count = VisualTreeHelper.GetChildrenCount(parentElement);
+            if (count == 0)
+                return null;
+
+            for (int i = 0; i < count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parentElement, i);
+
+                if (child != null && child is T)
+                {
+                    return (T)child;
+                }
+                else
+                {
+                    var result = FindFirstElementInVisualTree<T>(child);
+                    if (result != null)
+                        return result;
+
+                }
+            }
+            return null;
         }
 
         private enum QuestType
@@ -185,6 +306,23 @@ namespace CSMU_Project
 
             public List<string> Answers { get; set; }
             public List<string> corrected { get; set; }
+
+            public int Time { get; set; }
+        }
+
+        private string Security(byte[] array)
+        {
+            byte[] arrOfStr = new byte[array.Length];
+
+            for (int i = 0; i < arrOfStr.Length; i++)
+                arrOfStr[i] = (byte)(array[i] ^ 5);
+
+            return Encoding.ASCII.GetString(arrOfStr);
+        }
+
+        private string Desecurity(string encrypted)
+        {
+            return Security((Encoding.ASCII.GetBytes(encrypted)));
         }
 
         public void LoadingQuery(string file)
