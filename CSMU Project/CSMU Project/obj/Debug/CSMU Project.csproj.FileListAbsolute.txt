@@ -1,0 +1,25 @@
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\CSMU Project.csprojResolveAssemblyReference.cache
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\MainWindow.baml
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\QuestList.baml
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\ScreenResult.baml
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\User.baml
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\App.baml
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\MainWindow.g.cs
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\QuestList.g.cs
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\ScreenResult.g.cs
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\User.g.cs
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\App.g.cs
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\CSMU Project_MarkupCompile.cache
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\CSMU Project.g.resources
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\CSMU_Project.Properties.Resources.resources
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\CSMU Project.csproj.GenerateResource.Cache
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\bin\Debug\CSMU Project.exe
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\bin\Debug\CSMU Project.pdb
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\bin\Debug\Elysium.dll
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\bin\Debug\Microsoft.Expression.Drawing.dll
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\bin\Debug\Microsoft.Windows.Shell.dll
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\bin\Debug\Elysium.pdb
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\bin\Debug\Elysium.xml
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\bin\Debug\Microsoft.Windows.Shell.pdb
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\CSMU Project.exe
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Project\CSMU Project\obj\Debug\CSMU Project.pdb

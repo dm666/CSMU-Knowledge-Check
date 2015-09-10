@@ -46,7 +46,7 @@ namespace CSMU_Project
                     QuestLst.window.group = group.Text;
 
                     QuestLst.window.LoadingQuery(QuestLst.selectedFile);
-                    QuestLst.window.NextQuest(QuestLst.window.rowId);
+                    QuestLst.window._NextQuest(QuestLst.window.rowId);
                     QuestLst.window.Status.Content = string.Format("1 вопрос из {0}", QuestLst.window.CSMUFileMgr.Count);
 
                     QuestLst.Close();

@@ -84,7 +84,7 @@ namespace CSMU_Project
             }
         }
 
-        private void Closing(object sender, CancelEventArgs e)
+        private void _Closing(object sender, CancelEventArgs e)
         {
             Application.Current.Shutdown();
         }

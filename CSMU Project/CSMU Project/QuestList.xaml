@@ -6,7 +6,7 @@
               params:Design.Theme="Dark"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
-              Title="QuestList" Height="300" Width="300" Loaded="StartUp" Closing="Closing">
+              Title="QuestList" Height="300" Width="300" Loaded="StartUp" Closing="_Closing">
     <Grid>
         <Border Name="border">
             <ListBox Name="box" HorizontalAlignment="Left" Height="270" VerticalAlignment="Top" Width="292" KeyDown="Searching" MouseDoubleClick="SelectedByDoubleClick"/>

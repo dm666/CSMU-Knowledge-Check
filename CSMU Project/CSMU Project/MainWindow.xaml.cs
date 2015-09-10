@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.IO;
 
 namespace CSMU_Project
@@ -26,11 +27,92 @@ namespace CSMU_Project
         }
 
         public string student, group;
-        public int rowId = 0;
+        public int rowId = 0, diff;
         public Dictionary<int, double> ResultCollection = new Dictionary<int,double>();
         public double UltimateResult;
+        public DispatcherTimer timer = new DispatcherTimer();
+        private int time = 60;
 
-        public void NextQuest(int rowId)
+        private void Next(object sender, RoutedEventArgs e)
+        {
+            CalculateAmount(rowId, diff);
+            if (rowId < CSMUFileMgr.Count)
+            {
+                resetTime();
+                rowId++;
+                _NextQuest(rowId);
+                Status.Content = string.Format("Вопрос {0} из {1}.", rowId + 1, CSMUFileMgr.Count);
+            }
+            else
+                Screen();
+        }
+
+        private void Tick(object sender, EventArgs e)
+        {
+            diff = time / 1;
+
+            if (time > 0)
+            {
+                time--;
+                TimerTicker.Content = timeLeft(time % 60);
+            }
+            else
+            {
+                TimerTicker.Content = "Time out!";
+                CalculateAmount(rowId, diff);
+                if (rowId < CSMUFileMgr.Count)
+                {
+                    resetTime();
+                    rowId++;
+                    _NextQuest(rowId);
+                }
+                else
+                    Screen();
+            }
+        }
+
+        private void Screen()
+        {
+            ScreenResult res = new ScreenResult();
+            res.Owner = this;
+            res.ShowDialog();
+        }
+
+        private string timeLeft(int second)
+        {
+            string value = "";
+
+            switch (second % 10)
+            {
+                case 1:
+                    value = "секунда";
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                    value = "секунды";
+                    break;
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 0:
+                    value = "секунд";
+                    break;
+            }
+
+            return string.Format("Осталось 0:{0} {1}.", second, value);
+        }
+
+        private void resetTime()
+        {
+            timer.Stop();
+            TimerTicker.Content = "";
+            timer.Start();
+        }
+
+        public void _NextQuest(int rowId)
         {
             for (int i = 0; i < CSMUFileMgr.Count; i++)
             {
@@ -279,7 +361,7 @@ namespace CSMU_Project
             return null;
         }
 
-        private enum QuestType
+        public enum QuestType
         {
             Single = 1,
             Multiple,
