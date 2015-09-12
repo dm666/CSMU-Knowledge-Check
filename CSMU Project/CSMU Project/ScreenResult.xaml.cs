@@ -36,6 +36,11 @@ namespace CSMU_Project
             }
         }
 
+        private void _Closed(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
         private void ConvertToScreen(MainWindow Mgr)
         {
             List<Screen> source = new List<Screen>();

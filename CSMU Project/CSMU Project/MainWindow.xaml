@@ -6,11 +6,11 @@
               params:Design.Theme="Dark"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
-              Title="MainWindow" Height="414" Width="483">
+              Title="MainWindow" Height="414" Width="483" Loaded="StartUp">
     <Grid>
         <Label x:Name="QuestField" Content="Label" HorizontalAlignment="Left" Height="70" Margin="1,0,0,0" VerticalAlignment="Top" Width="474"/>
         <ListBox x:Name="box" HorizontalAlignment="Left" Height="262" Margin="0,70,0,0" VerticalAlignment="Top" Width="475"/>
-        <Button x:Name="NextQuest" Content="Button" HorizontalAlignment="Left" Height="37" Margin="356,340,0,0" VerticalAlignment="Top" Width="109"/>
+        <Button x:Name="NextQuest" Content="Button" HorizontalAlignment="Left" Height="37" Margin="356,340,0,0" VerticalAlignment="Top" Width="109" Click="Next"/>
         <Label x:Name="Status" Content="Label" HorizontalAlignment="Left" Height="37" Margin="10,340,0,0" VerticalAlignment="Top" Width="109"/>
         <Label x:Name="TimerTicker" Content="" HorizontalAlignment="Left" Height="37" Margin="124,340,0,0" VerticalAlignment="Top" Width="134"/>
     </Grid>

@@ -33,6 +33,15 @@ namespace CSMU_Project
         public DispatcherTimer timer = new DispatcherTimer();
         private int time = 60;
 
+        private void StartUp(object sender, RoutedEventArgs e)
+        {
+            QuestList list = new QuestList();
+            list.Owner = this;
+            list.ShowDialog();
+            this.Visibility = Visibility.Collapsed;
+            this.timer.Interval = new TimeSpan(0, 0, 1);
+        }
+
         private void Next(object sender, RoutedEventArgs e)
         {
             CalculateAmount(rowId, diff);
@@ -73,6 +82,7 @@ namespace CSMU_Project
 
         private void Screen()
         {
+            timer.Stop();
             ScreenResult res = new ScreenResult();
             res.Owner = this;
             res.ShowDialog();
