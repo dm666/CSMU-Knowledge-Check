@@ -3,13 +3,77 @@
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:metro="http://schemas.codeplex.com/elysium"
               xmlns:params="http://schemas.codeplex.com/elysium/params"
-              params:Design.Theme="Dark"
+              Title="Выбор вопроса"
+              Width="264"
+              Height="305"
+              Closing="_Closing"
+              Loaded="StartUp"
+              ResizeMode="NoResize"
+              WindowStartupLocation="CenterScreen"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
-              Title="QuestList" Height="300" Width="300" Loaded="StartUp" Closing="_Closing">
+              params:Design.Theme="Dark">
     <Grid>
-        <Border Name="border">
-            <ListBox Name="box" HorizontalAlignment="Left" Height="270" VerticalAlignment="Top" Width="292" KeyDown="Searching" MouseDoubleClick="SelectedByDoubleClick"/>
-        </Border>
+        <TabControl Width="256"
+                    Height="277"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+            <TabItem Header="Вопросы">
+                <Grid Margin="0,-2,0,41">
+                    <ListBox Name="box"
+                             Width="256"
+                             Height="231"
+                             Margin="0,-5,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Пользователь">
+                <Grid>
+                    <Label Name="_student"
+                           Width="212"
+                           Height="35"
+                           Margin="10,10,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           HorizontalContentAlignment="Center"
+                           Content="ФИО" />
+                    <TextBox Width="212"
+                             Height="30"
+                             Margin="10,45,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             TextWrapping="Wrap" />
+                    <Label Name="_group"
+                           Width="212"
+                           Height="33"
+                           Margin="10,80,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           HorizontalContentAlignment="Center"
+                           Content="Группа" />
+                    <TextBox Width="212"
+                             Height="30"
+                             Margin="10,118,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             TextWrapping="Wrap" />
+                    <Button x:Name="back"
+                            Width="99"
+                            Height="33"
+                            Margin="10,170,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Content="Назад" />
+                    <Button x:Name="Start"
+                            Width="90"
+                            Height="33"
+                            Margin="130,170,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Content="Начать" />
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </metro:Window>

@@ -25,7 +25,7 @@ namespace CSMU_Project
 
         MainWindow window;
 
-        private void Loaded(object sender, RoutedEventArgs e)
+        private void Loading(object sender, RoutedEventArgs e)
         {
             window = this.Owner as MainWindow;
 

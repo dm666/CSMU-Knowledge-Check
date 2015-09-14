@@ -6,7 +6,7 @@
               params:Design.Theme="Dark"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
-              Title="ScreenResult" Height="300" Width="300">
+              Title="ScreenResult" Height="300" Width="300" Loaded="Loading">
     <Grid>
         <DataGrid x:Name="table" HorizontalAlignment="Left" Height="270" VerticalAlignment="Top" Width="292"/>
 

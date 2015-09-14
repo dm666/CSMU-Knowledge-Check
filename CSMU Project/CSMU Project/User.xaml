@@ -6,7 +6,7 @@
               params:Design.Theme="Dark"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
-              Title="User" Height="270.5" Width="212">
+              Title="User" Height="270.5" Width="212" Loaded="StartUp">
     <Grid>
         <Label Content="ФИО" HorizontalAlignment="Left" Height="41" VerticalAlignment="Top" Width="204"/>
         <TextBox x:Name="student" HorizontalAlignment="Left" Height="51" Margin="0,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="204"/>

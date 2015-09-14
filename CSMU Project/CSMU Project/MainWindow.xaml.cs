@@ -45,12 +45,12 @@ namespace CSMU_Project
         private void Next(object sender, RoutedEventArgs e)
         {
             CalculateAmount(rowId, diff);
-            if (rowId < CSMUFileMgr.Count)
+            if (rowId < CSMUFileMgr.Count - 1)
             {
                 resetTime();
                 rowId++;
                 _NextQuest(rowId);
-                Status.Content = string.Format("Вопрос {0} из {1}.", rowId + 1, CSMUFileMgr.Count);
+                currentQuest.Content = string.Format("Вопрос {0} из {1}.", rowId + 1, CSMUFileMgr.Count);
             }
             else
                 Screen();
@@ -63,11 +63,11 @@ namespace CSMU_Project
             if (time > 0)
             {
                 time--;
-                TimerTicker.Content = timeLeft(time % 60);
+            //    TimerTicker.Content = timeLeft(time % 60);
             }
             else
             {
-                TimerTicker.Content = "Time out!";
+              //  TimerTicker.Content = "Time out!";
                 CalculateAmount(rowId, diff);
                 if (rowId < CSMUFileMgr.Count)
                 {
@@ -118,7 +118,7 @@ namespace CSMU_Project
         private void resetTime()
         {
             timer.Stop();
-            TimerTicker.Content = "";
+            //TimerTicker.Content = "";
             timer.Start();
         }
 
@@ -127,7 +127,7 @@ namespace CSMU_Project
             for (int i = 0; i < CSMUFileMgr.Count; i++)
             {
                 if (!CSMUFileMgr.ContainsKey(rowId))
-                    continue;
+                    return;
             }
 
             // clear answers and quest

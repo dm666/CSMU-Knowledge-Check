@@ -3,15 +3,72 @@
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:metro="http://schemas.codeplex.com/elysium"
               xmlns:params="http://schemas.codeplex.com/elysium/params"
-              params:Design.Theme="Dark"
+              Title="MainWindow"
+              Width="348"
+              Height="478"
+              Loaded="StartUp"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
-              Title="MainWindow" Height="414" Width="483" Loaded="StartUp">
+              params:Design.Theme="Dark">
     <Grid>
-        <Label x:Name="QuestField" Content="Label" HorizontalAlignment="Left" Height="70" Margin="1,0,0,0" VerticalAlignment="Top" Width="474"/>
-        <ListBox x:Name="box" HorizontalAlignment="Left" Height="262" Margin="0,70,0,0" VerticalAlignment="Top" Width="475"/>
-        <Button x:Name="NextQuest" Content="Button" HorizontalAlignment="Left" Height="37" Margin="356,340,0,0" VerticalAlignment="Top" Width="109" Click="Next"/>
-        <Label x:Name="Status" Content="Label" HorizontalAlignment="Left" Height="37" Margin="10,340,0,0" VerticalAlignment="Top" Width="109"/>
-        <Label x:Name="TimerTicker" Content="" HorizontalAlignment="Left" Height="37" Margin="124,340,0,0" VerticalAlignment="Top" Width="134"/>
+        <TabControl Width="340"
+                    Height="448"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+            <TabItem Header="Тестирование">
+                <Grid Margin="0,0,1,0">
+                    <Label x:Name="QuestField"
+                           Width="337"
+                           Height="110"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top" />
+                    <ListBox x:Name="box"
+                             Width="337"
+                             Height="242"
+                             Margin="0,111,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top" />
+                    <Button x:Name="NextQst"
+                            Width="117"
+                            Height="38"
+                            Margin="212,358,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Content="Дальше" />
+                    <Label x:Name="currentQuest"
+                           Width="152"
+                           Height="37"
+                           Margin="0,358,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           HorizontalContentAlignment="Center"
+                           Content="" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Результат">
+                <Grid>
+                    <ListView x:Name="table"
+                              Width="340"
+                              Height="356"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Top">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding Qst}" Header="Вопрос" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Times}" Header="Время, сек" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Percents}" Header="Проценты, %" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button x:Name="BtnExit"
+                            Width="118"
+                            Height="44"
+                            Margin="222,356,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Content="Выйти" />
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </metro:Window>

@@ -47,12 +47,13 @@ namespace CSMU_Project
 
                     QuestLst.window.LoadingQuery(QuestLst.selectedFile);
                     QuestLst.window._NextQuest(QuestLst.window.rowId);
-                    QuestLst.window.Status.Content = string.Format("1 вопрос из {0}", QuestLst.window.CSMUFileMgr.Count);
+                  //  QuestLst.window.Status.Content = string.Format("1 вопрос из {0}", QuestLst.window.CSMUFileMgr.Count);
                     QuestLst.window.Visibility = Visibility.Visible;
+                    QuestLst.window.ShowDialog();
                     QuestLst.window.timer.Start();
 
-                    QuestLst.Close();
-                    this.Close();
+            //        QuestLst.Close();
+             //       this.Close();
                 }
             }
         }

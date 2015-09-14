@@ -26,7 +26,6 @@ namespace CSMU_Project
         }
 
         private string[] files;
-        private User user;
         public MainWindow window;
         public string selectedFile;
 
@@ -53,13 +52,8 @@ namespace CSMU_Project
         {
             box.ItemsSource = GetFilesList();
 
-            border.BorderBrush = Elysium.AccentBrushes.Blue;
-            border.BorderThickness = new Thickness(1.0);
-
-            window = this.Owner as MainWindow;
-
-            user = new User();
-            user.Owner = this;
+            _student.Foreground = Elysium.AccentBrushes.Blue;
+            _group.Foreground = Elysium.AccentBrushes.Blue;
         }
 
         private void Searching(object sender, KeyEventArgs e)
@@ -76,12 +70,19 @@ namespace CSMU_Project
 
         private void SelectedByDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (window != null)
+          /*  if (window != null)
             {
                 selectedFile = files[box.SelectedIndex];
                 window.Title = box.SelectedItem.ToString();
-                user.ShowDialog();
-            }
+            }*/
+        }
+
+        private void Previous(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void Starting(object sender, RoutedEventArgs e)
+        {
         }
 
         private void _Closing(object sender, CancelEventArgs e)
