@@ -32,13 +32,10 @@ namespace CSMU_Project
         public double UltimateResult;
         public DispatcherTimer timer = new DispatcherTimer();
         private int time = 60;
+        public string currentTitle = "";
 
         private void StartUp(object sender, RoutedEventArgs e)
         {
-            QuestList list = new QuestList();
-            list.Owner = this;
-            list.ShowDialog();
-            this.Visibility = Visibility.Collapsed;
             this.timer.Interval = new TimeSpan(0, 0, 1);
         }
 
@@ -63,7 +60,7 @@ namespace CSMU_Project
             if (time > 0)
             {
                 time--;
-            //    TimerTicker.Content = timeLeft(time % 60);
+                Application.Current.MainWindow.Title = timeLeft(time % 60);
             }
             else
             {
@@ -112,7 +109,7 @@ namespace CSMU_Project
                     break;
             }
 
-            return string.Format("Осталось 0:{0} {1}.", second, value);
+            return string.Format("{0} 0:{1} {2}.", currentTitle, second, value);
         }
 
         private void resetTime()

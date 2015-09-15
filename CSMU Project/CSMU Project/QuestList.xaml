@@ -14,12 +14,13 @@
               params:Design.ContrastBrush="White"
               params:Design.Theme="Dark">
     <Grid>
-        <TabControl Width="256"
+        <TabControl x:Name="tbControl"
+                    Width="256"
                     Height="277"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top">
             <TabItem Header="Вопросы">
-                <Grid Margin="0,-2,0,41">
+                <Grid Margin="0,-2,0,2">
                     <ListBox Name="box"
                              Width="256"
                              Height="231"
@@ -38,7 +39,8 @@
                            VerticalAlignment="Top"
                            HorizontalContentAlignment="Center"
                            Content="ФИО" />
-                    <TextBox Width="212"
+                    <TextBox Name="studentName"
+                             Width="212"
                              Height="30"
                              Margin="10,45,0,0"
                              HorizontalAlignment="Left"
@@ -52,7 +54,8 @@
                            VerticalAlignment="Top"
                            HorizontalContentAlignment="Center"
                            Content="Группа" />
-                    <TextBox Width="212"
+                    <TextBox Name="studentGroup"
+                             Width="212"
                              Height="30"
                              Margin="10,118,0,0"
                              HorizontalAlignment="Left"
@@ -64,6 +67,7 @@
                             Margin="10,170,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
+                            Click="Previous"
                             Content="Назад" />
                     <Button x:Name="Start"
                             Width="90"
@@ -71,6 +75,7 @@
                             Margin="130,170,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
+                            Click="Starting"
                             Content="Начать" />
                 </Grid>
             </TabItem>

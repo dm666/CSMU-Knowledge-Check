@@ -70,19 +70,48 @@ namespace CSMU_Project
 
         private void SelectedByDoubleClick(object sender, MouseButtonEventArgs e)
         {
-          /*  if (window != null)
-            {
-                selectedFile = files[box.SelectedIndex];
-                window.Title = box.SelectedItem.ToString();
-            }*/
+            selectedFile = files[box.SelectedIndex];
+
+            ((TabItem)tbControl.Items[0]).IsEnabled = false;
+            ((TabItem)tbControl.Items[1]).IsEnabled = true;
+
+            tbControl.SelectedIndex = 1;
         }
 
         private void Previous(object sender, RoutedEventArgs e)
         {
+            selectedFile = string.Empty;
+
+            ((TabItem)tbControl.Items[0]).IsEnabled = true;
+            ((TabItem)tbControl.Items[1]).IsEnabled = false;
+
+            tbControl.SelectedIndex = 0;
         }
 
         private void Starting(object sender, RoutedEventArgs e)
         {
+            if (studentName.Text.Length < 1 || string.IsNullOrWhiteSpace(studentName.Text)
+            || studentGroup.Text.Length < 1 || string.IsNullOrWhiteSpace(studentGroup.Text))
+            {
+                MessageBox.Show("Заполните все поля.");
+                return;
+            }
+
+            window = new MainWindow();
+            window.Owner = this;
+
+            window.student = studentName.Text;
+            window.group = studentGroup.Text;
+            window.currentTitle = System.IO.Path.GetFileNameWithoutExtension(selectedFile);
+
+            window.rowId = 0;
+            window.LoadingQuery(selectedFile);
+            window._NextQuest(window.rowId);
+            window.currentQuest.Content = string.Format("Вопрос 1 из {0}.", window.CSMUFileMgr.Count);
+            window.Show();
+            window.timer.Start();
+
+            this.Close();
         }
 
         private void _Closing(object sender, CancelEventArgs e)
