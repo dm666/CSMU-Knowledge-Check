@@ -11,7 +11,8 @@
               params:Design.ContrastBrush="White"
               params:Design.Theme="Dark">
     <Grid>
-        <TabControl Width="340"
+        <TabControl Name="mainTab"
+                    Width="340"
                     Height="448"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top">
@@ -34,6 +35,7 @@
                             Margin="212,358,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
+                            Click="Next"
                             Content="Дальше" />
                     <Label x:Name="currentQuest"
                            Width="152"
@@ -54,9 +56,9 @@
                               VerticalAlignment="Top">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn DisplayMemberBinding="{Binding Qst}" Header="Вопрос" />
-                                <GridViewColumn DisplayMemberBinding="{Binding Times}" Header="Время, сек" />
-                                <GridViewColumn DisplayMemberBinding="{Binding Percents}" Header="Проценты, %" />
+                                <GridViewColumn DisplayMemberBinding="{Binding SQuest}" Header="Вопрос" />
+                                <GridViewColumn DisplayMemberBinding="{Binding STime}" Header="Время, сек" />
+                                <GridViewColumn DisplayMemberBinding="{Binding SPercent}" Header="Проценты, %" />
                             </GridView>
                         </ListView.View>
                     </ListView>

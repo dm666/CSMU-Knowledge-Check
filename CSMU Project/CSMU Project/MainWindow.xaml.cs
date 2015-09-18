@@ -80,9 +80,43 @@ namespace CSMU_Project
         private void Screen()
         {
             timer.Stop();
-            ScreenResult res = new ScreenResult();
-            res.Owner = this;
-            res.ShowDialog();
+
+            ((TabItem)mainTab.Items[0]).IsEnabled = false;
+            ((TabItem)mainTab.Items[1]).IsEnabled = true;
+
+            // fill results
+            table.ItemsSource = GetScreenResult();
+
+            // then select tab "Result"
+            mainTab.SelectedIndex = 1;
+        }
+
+        private List<ScreenResult> GetScreenResult()
+        {
+            List<ScreenResult> table = new List<ScreenResult>();
+
+            for (int x = 0; x < CSMUFileMgr.Count; x++)
+                table.Add(
+                    new ScreenResult(CSMUFileMgr[x].Quest,
+                    CSMUFileMgr[x].Time,
+                    GetPercentOfQuestByEntry(x))
+                    );
+
+            return table;
+        }
+
+        private class ScreenResult
+        {
+            public ScreenResult(string q, int t, double p)
+            {
+                this.SQuest = q;
+                this.STime = t;
+                this.SPercent = p;
+            }
+
+            public string SQuest { get; set; }
+            public int STime { get; set; }
+            public double SPercent { get; set; }
         }
 
         private string timeLeft(int second)
@@ -157,7 +191,7 @@ namespace CSMU_Project
 
             if (CSMUFileMgr[id].questType == QuestType.Single)
             {
-                if (!CSMUFileMgr[id].corrected.Contains(GetItemText(box.SelectedIndex, QuestType.Single)))
+                if (!CSMUFileMgr[id].corrected.Contains(GetSingleItemText()))
                     Wrong++;
             }
             else if (CSMUFileMgr[id].questType == QuestType.Multiple || CSMUFileMgr[id].questType == QuestType.ChoiceImage)
@@ -166,14 +200,14 @@ namespace CSMU_Project
                 {
                     for (int i = 0; i < box.SelectedItems.Count; i++)
                     {
-                        if (!CSMUFileMgr[id].corrected.Contains(GetItemText(i, CSMUFileMgr[id].questType)))
+                        if (!CSMUFileMgr[id].corrected.Contains(GetMultipleItemText(i, CSMUFileMgr[id].questType)))
                             Wrong++;
                     }
                 }
 
                 if (box.SelectedItems.Count == 1)
                 {
-                    if (!CSMUFileMgr[id].corrected.Contains(GetItemText(box.SelectedIndex, CSMUFileMgr[id].questType)))
+                    if (!CSMUFileMgr[id].corrected.Contains(GetMultipleItemText(box.SelectedIndex, CSMUFileMgr[id].questType)))
                         Wrong = CSMUFileMgr[id].corrected.Count;
                 }
 
@@ -333,9 +367,16 @@ namespace CSMU_Project
             questField.Content = panel;
         }
 
-        private string GetItemText(int index, QuestType iType)
+        private string GetSingleItemText()
         {
-            ListBoxItem item = box.SelectedItems[index] as ListBoxItem;
+            ListBoxItem item = (ListBoxItem)box.ItemContainerGenerator.ContainerFromIndex(box.SelectedIndex);
+
+            return item.Content.ToString();
+        }
+
+        private string GetMultipleItemText(int i, QuestType iType)
+        {
+            ListBoxItem item = (ListBoxItem)box.ItemContainerGenerator.ContainerFromItem(box.SelectedItems[i]);
 
             if (iType == QuestType.Multiple)
                 return item.Content.ToString();
