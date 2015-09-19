@@ -6,6 +6,7 @@
               Title="MainWindow"
               Width="348"
               Height="478"
+              Closing="_Closing"
               Loaded="StartUp"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
@@ -57,8 +58,8 @@
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn DisplayMemberBinding="{Binding SQuest}" Header="Вопрос" />
+                                <GridViewColumn DisplayMemberBinding="{Binding SPercent}" Header="Оценка" />
                                 <GridViewColumn DisplayMemberBinding="{Binding STime}" Header="Время, сек" />
-                                <GridViewColumn DisplayMemberBinding="{Binding SPercent}" Header="Проценты, %" />
                             </GridView>
                         </ListView.View>
                     </ListView>

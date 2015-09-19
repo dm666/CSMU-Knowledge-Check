@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.ComponentModel;
 using System.IO;
 
 namespace CSMU_Project
@@ -37,6 +38,9 @@ namespace CSMU_Project
         private void StartUp(object sender, RoutedEventArgs e)
         {
             this.timer.Interval = new TimeSpan(0, 0, 1);
+            this.timer.Tick += Tick;
+            //this.timer.Start();
+            this.QuestField.Foreground = Brushes.Aqua;
         }
 
         private void Next(object sender, RoutedEventArgs e)
@@ -60,7 +64,7 @@ namespace CSMU_Project
             if (time > 0)
             {
                 time--;
-                Application.Current.MainWindow.Title = timeLeft(time % 60);
+                App.Current.Windows[1].Title = timeLeft(time % 60);
             }
             else
             {
@@ -83,6 +87,7 @@ namespace CSMU_Project
 
             ((TabItem)mainTab.Items[0]).IsEnabled = false;
             ((TabItem)mainTab.Items[1]).IsEnabled = true;
+            App.Current.Windows[1].Title = currentTitle;
 
             // fill results
             table.ItemsSource = GetScreenResult();
@@ -98,25 +103,40 @@ namespace CSMU_Project
             for (int x = 0; x < CSMUFileMgr.Count; x++)
                 table.Add(
                     new ScreenResult(CSMUFileMgr[x].Quest,
-                    CSMUFileMgr[x].Time,
-                    GetPercentOfQuestByEntry(x))
+                        GetPercentOfQuestByEntry(x) + "%",
+                    CSMUFileMgr[x].Time)
                     );
+
+            object time = null;
+            if (GetTotalTime() < 60)
+                time = GetTotalTime() + " сек.";
+            else
+                time = GetTotalTime() + " мин.";
+
+            table.Add(new ScreenResult(""));
+            table.Add(new ScreenResult("Студент", "Группа", "Общий результат"));
+            table.Add(new ScreenResult(student, group, Result() + "%"));
+            table.Add(new ScreenResult("Время тестирования", time));
 
             return table;
         }
 
         private class ScreenResult
         {
-            public ScreenResult(string q, int t, double p)
+            public ScreenResult(string q, object p = null, object t = null)
             {
                 this.SQuest = q;
-                this.STime = t;
-                this.SPercent = p;
+
+                if (p != null)
+                    this.SPercent = p;
+
+                if (t != null)
+                    this.STime = t;
             }
 
             public string SQuest { get; set; }
-            public int STime { get; set; }
-            public double SPercent { get; set; }
+            public object STime { get; set; }
+            public object SPercent { get; set; }
         }
 
         private string timeLeft(int second)
@@ -143,13 +163,12 @@ namespace CSMU_Project
                     break;
             }
 
-            return string.Format("{0} 0:{1} {2}.", currentTitle, second, value);
+            return string.Format("{0} 0:{1} {2}", currentTitle, second, value);
         }
 
         private void resetTime()
         {
-            timer.Stop();
-            //TimerTicker.Content = "";
+            time = 60;
             timer.Start();
         }
 
@@ -164,6 +183,11 @@ namespace CSMU_Project
             // clear answers and quest
             QuestField.Content = string.Empty;
             box.Items.Clear();
+
+            if (CSMUFileMgr[rowId].questType == QuestType.Single)
+                box.SelectionMode = SelectionMode.Single;
+            else
+                box.SelectionMode = SelectionMode.Multiple;
 
             if (CSMUFileMgr[rowId].questType == QuestType.TextingImage)
                 box.Items.Add(AddItemWithTextImage(CSMUFileMgr[rowId].Quest, CSMUFileMgr[rowId].HeaderImage));
@@ -207,17 +231,30 @@ namespace CSMU_Project
 
                 if (box.SelectedItems.Count == 1)
                 {
-                    if (!CSMUFileMgr[id].corrected.Contains(GetMultipleItemText(box.SelectedIndex, CSMUFileMgr[id].questType)))
-                        Wrong = CSMUFileMgr[id].corrected.Count;
+                    for (int i = 0; i < box.SelectedItems.Count; i++)
+                    {
+                        if (CSMUFileMgr[id].corrected.Contains(GetMultipleItemText(i, CSMUFileMgr[id].questType)))
+                            Wrong = CSMUFileMgr[id].corrected.Count - 1;
+                        else
+                            Wrong = CSMUFileMgr[id].corrected.Count;
+                    }
                 }
 
                 if (box.SelectedItems.Count == CSMUFileMgr[id].Answers.Count)
                 {
-                    ResultCollection.Add(id, 0);
-                    return;
+                    if (CSMUFileMgr[id].corrected.Count == CSMUFileMgr[id].Answers.Count)
+                    {
+                        ResultCollection.Add(id, 1.0);
+                        return;
+                    }
+                    else
+                    {
+                        ResultCollection.Add(id, 0);
+                        return;
+                    }
                 }
 
-                if (box.SelectedItems.Count == Wrong)
+                if (box.SelectedItems.Count == 0)
                     Wrong = CSMUFileMgr[id].corrected.Count;
             }
             else if (CSMUFileMgr[id].questType == QuestType.TextingImage)
@@ -245,7 +282,7 @@ namespace CSMU_Project
             if (!CSMUFileMgr.ContainsKey(questId))
                 throw new Exception("Key not found.");
 
-            return Convert.ToDouble(string.Format("{0:0.0}", ResultCollection[questId]));
+            return ResultCollection[questId] * 100;
         }
 
         public double Result()
@@ -261,7 +298,7 @@ namespace CSMU_Project
             }
 
             double res = length / CSMUFileMgr.Count;
-            return res;
+            return res * 100;
         }
 
         public string OverallResult()
@@ -269,9 +306,24 @@ namespace CSMU_Project
             return string.Format("{0:0.0%}", Result());
         }
 
+        private int GetTotalTime()
+        {
+            int obj = 0;
+
+            for (int i = 0; i < CSMUFileMgr.Count; i++)
+                obj += CSMUFileMgr[i].Time;
+
+            return obj;
+        }
+
+        private void _Closing(object sender, CancelEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
         private ListBoxItem AddItemWithTextImage(string quest, string header)
         {
-            if (File.Exists(header))
+            if (!File.Exists(header))
                 throw new Exception("File not found.");
 
             ListBoxItem item = new ListBoxItem();

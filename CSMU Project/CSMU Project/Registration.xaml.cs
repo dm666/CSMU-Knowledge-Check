@@ -111,7 +111,7 @@ namespace CSMU_Project
             window.Show();
             window.timer.Start();
 
-            this.Close();
+            this.Visibility = System.Windows.Visibility.Hidden;
         }
 
         private void _Closing(object sender, CancelEventArgs e)
