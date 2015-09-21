@@ -30,7 +30,7 @@
                              MouseDoubleClick="SelectedByDoubleClick" />
                 </Grid>
             </TabItem>
-            <TabItem Header="Пользователь">
+            <TabItem Header="Пользователь" Visibility="Collapsed">
                 <Grid>
                     <Label Name="_student"
                            Width="212"

@@ -72,8 +72,8 @@ namespace CSMU_Project
         {
             selectedFile = files[box.SelectedIndex];
 
-            ((TabItem)tbControl.Items[0]).IsEnabled = false;
-            ((TabItem)tbControl.Items[1]).IsEnabled = true;
+            ((TabItem)tbControl.Items[0]).Visibility = System.Windows.Visibility.Collapsed;
+            ((TabItem)tbControl.Items[1]).Visibility = System.Windows.Visibility.Visible;
 
             tbControl.SelectedIndex = 1;
         }
@@ -81,9 +81,11 @@ namespace CSMU_Project
         private void Previous(object sender, RoutedEventArgs e)
         {
             selectedFile = string.Empty;
+            studentName.Text = "";
+            studentGroup.Text = "";
 
-            ((TabItem)tbControl.Items[0]).IsEnabled = true;
-            ((TabItem)tbControl.Items[1]).IsEnabled = false;
+            ((TabItem)tbControl.Items[0]).Visibility = System.Windows.Visibility.Visible;
+            ((TabItem)tbControl.Items[1]).Visibility = System.Windows.Visibility.Collapsed;
 
             tbControl.SelectedIndex = 0;
         }

@@ -3,52 +3,70 @@
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:metro="http://schemas.codeplex.com/elysium"
               xmlns:params="http://schemas.codeplex.com/elysium/params"
-              Title="MainWindow"
-              Width="348"
+              Title="Программа тестирования"
+              Width="613"
               Height="478"
               Closing="_Closing"
               Loaded="StartUp"
+              ResizeMode="NoResize"
+              WindowStartupLocation="CenterScreen"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
               params:Design.Theme="Dark">
     <Grid>
         <TabControl Name="mainTab"
-                    Width="340"
+                    Width="605"
                     Height="448"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top">
             <TabItem Header="Тестирование">
                 <Grid Margin="0,0,1,0">
                     <Label x:Name="QuestField"
-                           Width="337"
-                           Height="110"
+                           Width="594"
+                           Height="93"
                            HorizontalAlignment="Left"
-                           VerticalAlignment="Top" />
+                           VerticalAlignment="Top"
+                           BorderThickness="1" />
                     <ListBox x:Name="box"
-                             Width="337"
+                             Width="594"
                              Height="242"
                              Margin="0,111,0,0"
                              HorizontalAlignment="Left"
-                             VerticalAlignment="Top" />
+                             VerticalAlignment="Top"
+                             Visibility="Hidden" />
+                    <TextBox Name="answerBox"
+                             Height="46"
+                             Margin="2,98,10,256"
+                             BorderBrush="Aqua"
+                             BorderThickness="1"
+                             Text=""
+                             TextWrapping="Wrap" />
                     <Button x:Name="NextQst"
                             Width="117"
                             Height="38"
-                            Margin="212,358,0,0"
+                            Margin="477,358,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
                             Click="Next"
                             Content="Дальше" />
                     <Label x:Name="currentQuest"
-                           Width="152"
+                           Width="189"
                            Height="37"
                            Margin="0,358,0,0"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Top"
                            HorizontalContentAlignment="Center"
                            Content="" />
+                    <TextBlock x:Name="block"
+                               Width="189"
+                               Height="37"
+                               Margin="207,358,0,0"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               TextWrapping="Wrap" />
                 </Grid>
             </TabItem>
-            <TabItem Header="Результат">
+            <TabItem Header="Результат" Visibility="Collapsed">
                 <Grid>
                     <ListView x:Name="table"
                               Width="340"
@@ -73,5 +91,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
+
     </Grid>
 </metro:Window>

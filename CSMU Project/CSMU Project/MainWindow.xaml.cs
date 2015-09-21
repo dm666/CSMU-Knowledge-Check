@@ -39,8 +39,12 @@ namespace CSMU_Project
         {
             this.timer.Interval = new TimeSpan(0, 0, 1);
             this.timer.Tick += Tick;
-            //this.timer.Start();
-            this.QuestField.Foreground = Brushes.Aqua;
+
+            this.answerBox.BorderBrush = Elysium.AccentBrushes.Blue;
+            this.answerBox.Foreground = Elysium.AccentBrushes.Blue;
+            this.QuestField.Foreground = Elysium.AccentBrushes.Blue;
+            this.QuestField.BorderBrush = Elysium.AccentBrushes.Blue;
+            this.currentQuest.Foreground = Elysium.AccentBrushes.Blue;
         }
 
         private void Next(object sender, RoutedEventArgs e)
@@ -64,13 +68,23 @@ namespace CSMU_Project
             if (time > 0)
             {
                 time--;
-                App.Current.Windows[1].Title = timeLeft(time % 60);
+
+                if (time < 10)
+                {
+                    block.Text = "";
+                    block.Inlines.Add(new Run(timeLeft(time % 60)) { Foreground = Brushes.Red });
+                }
+                else
+                {
+                    block.Foreground = Elysium.AccentBrushes.Blue;
+                    block.Text = timeLeft(time % 60);
+                }
             }
             else
             {
-              //  TimerTicker.Content = "Time out!";
+                block.Text = "Время вышло.";
                 CalculateAmount(rowId, diff);
-                if (rowId < CSMUFileMgr.Count)
+                if (rowId < CSMUFileMgr.Count - 1)
                 {
                     resetTime();
                     rowId++;
@@ -85,9 +99,8 @@ namespace CSMU_Project
         {
             timer.Stop();
 
-            ((TabItem)mainTab.Items[0]).IsEnabled = false;
-            ((TabItem)mainTab.Items[1]).IsEnabled = true;
-            App.Current.Windows[1].Title = currentTitle;
+            ((TabItem)mainTab.Items[0]).Visibility = System.Windows.Visibility.Collapsed;
+            ((TabItem)mainTab.Items[1]).Visibility = System.Windows.Visibility.Visible;
 
             // fill results
             table.ItemsSource = GetScreenResult();
@@ -108,17 +121,21 @@ namespace CSMU_Project
                     );
 
             object time = null;
-            if (GetTotalTime() < 60)
+           // if (GetTotalTime() < 60)
                 time = GetTotalTime() + " сек.";
-            else
-                time = GetTotalTime() + " мин.";
+          //  else
+            //    time = GetTotalTime() / 60 + " мин.";
 
             table.Add(new ScreenResult(""));
-            table.Add(new ScreenResult("Студент", "Группа", "Общий результат"));
-            table.Add(new ScreenResult(student, group, Result() + "%"));
+            table.Add(new ScreenResult("Общий результат", TotalResult()));
             table.Add(new ScreenResult("Время тестирования", time));
 
             return table;
+        }
+
+        private string TotalResult()
+        {
+            return string.Format("{0:0.0%}", Result());
         }
 
         private class ScreenResult
@@ -163,12 +180,13 @@ namespace CSMU_Project
                     break;
             }
 
-            return string.Format("{0} 0:{1} {2}", currentTitle, second, value);
+            return string.Format("Осталось {0} {1}.", second, value);
         }
 
         private void resetTime()
         {
             time = 60;
+            block.Foreground = Elysium.AccentBrushes.Blue;
             timer.Start();
         }
 
@@ -184,13 +202,29 @@ namespace CSMU_Project
             QuestField.Content = string.Empty;
             box.Items.Clear();
 
-            if (CSMUFileMgr[rowId].questType == QuestType.Single)
+            if (CSMUFileMgr[rowId].questType == QuestType.TextingImage)
+            {
+                answerBox.Visibility = System.Windows.Visibility.Visible;
+
+                if (box.Visibility == System.Windows.Visibility.Visible)
+                    box.Visibility = System.Windows.Visibility.Hidden;
+            }
+            else if (CSMUFileMgr[rowId].questType == QuestType.Single)
+            {
+                answerBox.Visibility = System.Windows.Visibility.Hidden;
+                box.Visibility = System.Windows.Visibility.Visible;
                 box.SelectionMode = SelectionMode.Single;
-            else
+            }
+            else if (CSMUFileMgr[rowId].questType == QuestType.Multiple ||
+                CSMUFileMgr[rowId].questType == QuestType.ChoiceImage)
+            {
+                answerBox.Visibility = System.Windows.Visibility.Hidden;
+                box.Visibility = System.Windows.Visibility.Visible;
                 box.SelectionMode = SelectionMode.Multiple;
+            }
 
             if (CSMUFileMgr[rowId].questType == QuestType.TextingImage)
-                box.Items.Add(AddItemWithTextImage(CSMUFileMgr[rowId].Quest, CSMUFileMgr[rowId].HeaderImage));
+                AddItemWithTextImage(CSMUFileMgr[rowId].Quest, CSMUFileMgr[rowId].HeaderImage);
             else
             {
                 SetQuestField(QuestField, CSMUFileMgr[rowId].Quest);
@@ -207,11 +241,12 @@ namespace CSMU_Project
 
             int Wrong = 0;
 
-            if (box.SelectedItems.Count < 1)
-            {
-                ResultCollection.Add(id, 0.0);
-                return;
-            }
+            if (CSMUFileMgr[id].questType != QuestType.TextingImage)
+                if (box.SelectedItems.Count < 1)
+                {
+                    ResultCollection.Add(id, 0.0);
+                    return;
+                }
 
             if (CSMUFileMgr[id].questType == QuestType.Single)
             {
@@ -259,15 +294,9 @@ namespace CSMU_Project
             }
             else if (CSMUFileMgr[id].questType == QuestType.TextingImage)
             {
-                ListBoxItem i = box.ItemContainerGenerator.ContainerFromIndex(0) as ListBoxItem;
-
-                TextBox value = FindFirstElementInVisualTree<TextBox>(i);
-
-                if (value.Text.ToLower() != CSMUFileMgr[id].ImageAnswer.ToLower())
-                {
-                    ResultCollection.Add(id, 0.0);
-                    return;
-                }
+                ResultCollection.Add(id, answerBox.Text.ToLower() == CSMUFileMgr[id].ImageAnswer.ToLower() ? 1.0 : 0.0);
+                CSMUFileMgr[id].Time = ((60 - diff) == 0 ? 1 : (60 - diff));
+                return;
             }
 
             UltimateResult = (CSMUFileMgr[id].corrected.Count - Wrong);
@@ -298,12 +327,7 @@ namespace CSMU_Project
             }
 
             double res = length / CSMUFileMgr.Count;
-            return res * 100;
-        }
-
-        public string OverallResult()
-        {
-            return string.Format("{0:0.0%}", Result());
+            return res;
         }
 
         private int GetTotalTime()
@@ -321,14 +345,11 @@ namespace CSMU_Project
             Application.Current.Shutdown();
         }
 
-        private ListBoxItem AddItemWithTextImage(string quest, string header)
+        private void AddItemWithTextImage(string quest, string header)
         {
             if (!File.Exists(header))
                 throw new Exception("File not found.");
 
-            ListBoxItem item = new ListBoxItem();
-
-            StackPanel p = new StackPanel() { Orientation = Orientation.Horizontal };
             StackPanel p2 = new StackPanel() { Orientation = Orientation.Horizontal };
 
             TextBlock field = new TextBlock()
@@ -336,33 +357,20 @@ namespace CSMU_Project
                 Text = quest,
                 TextAlignment = TextAlignment.Left,
                 Height = 45,
-                Width = box.Width - 100
+                //Width = box.Width - 100
             };
 
             Image img = new Image()
             {
                 Source = new BitmapImage(new Uri(header)),
                 Height = 100,
-                Width = 100
+                Width = 80
             };
 
             p2.Children.Add(field);
             p2.Children.Add(img);
 
             QuestField.Content = p2;
-
-            TextBox iBox = new TextBox()
-            {
-                TextAlignment = TextAlignment.Left,
-                Height = 45,
-                Width = box.Width
-            };
-
-            p.Children.Add(iBox);
-
-            item.Content = p;
-
-            return item;
         }
 
         private ListBoxItem AddItemWithoutImage(QuestType iType, string ItemText)
@@ -381,15 +389,15 @@ namespace CSMU_Project
                 Image img = new Image()
                 {
                     Source = new BitmapImage(new Uri(ItemText)),
-                    Height = 72,
-                    Width = 72,
+                    Height = 48,
+                    Width = 48,
                 };
 
                 TextBlock block = new TextBlock()
                 {
                     Text = ItemText,
                     TextAlignment = TextAlignment.Left,
-                    Height = 45,
+                    Height = 32,
                     Width = box.Width
                 };
 
@@ -621,6 +629,22 @@ namespace CSMU_Project
                 row.Add(r);
 
             return row;
+        }
+
+        private string Parsing(string[] data, string attr)
+        {
+            string AttrValue = "Not found.";
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i].ToLower().Contains(attr.ToLower() + "\""))
+                {
+                    AttrValue = data[i].Replace("\"", "").Replace(attr, "").TrimStart();
+                    break;
+                }
+            }
+
+            return AttrValue;
         }
     }
 }
