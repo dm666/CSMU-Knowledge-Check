@@ -533,19 +533,14 @@ namespace CSMU_Project
         {
             CSMUFileMgr = new Dictionary<int, CSMUFile>();
 
-            string[] data = File.ReadAllLines(file);
+            string[] data = File.ReadAllLines(file)
+                .Where(empty => !string.IsNullOrEmpty(empty)).ToArray();
 
-            if (data[data.Length - 1] == string.Empty)
-                Array.Resize(ref data, data.Length - 1);
-
-            if (data.Length < 2)
+            if (data.Length < 1)
                 throw new Exception("File is empty.");
 
             for (int rowId = 0; rowId < data.Length; rowId++)
             {
-                if (data[rowId] == string.Empty)
-                    continue;
-
                 List<string> rowData = GetRowData(data[rowId]);
 
                 CFile = new CSMUFile();
