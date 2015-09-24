@@ -34,6 +34,7 @@ namespace CSMU_Project
         public DispatcherTimer timer = new DispatcherTimer();
         private int time = 60;
         public string currentTitle = "";
+        private int endResponce = 1;
 
         private void StartUp(object sender, RoutedEventArgs e)
         {
@@ -107,6 +108,18 @@ namespace CSMU_Project
 
             // then select tab "Result"
             mainTab.SelectedIndex = 1;
+
+            this.Width = table.Width;
+        }
+
+        private void Exit(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private string shorted(string name, int chars)
+        {
+            return name.ToCharArray().Count() > chars ? name.Substring(0, chars) + "..." : name;
         }
 
         private List<ScreenResult> GetScreenResult()
@@ -115,16 +128,12 @@ namespace CSMU_Project
 
             for (int x = 0; x < CSMUFileMgr.Count; x++)
                 table.Add(
-                    new ScreenResult(CSMUFileMgr[x].Quest,
+                    new ScreenResult(shorted(CSMUFileMgr[x].Quest, 30),
                         GetPercentOfQuestByEntry(x) + "%",
                     CSMUFileMgr[x].Time)
                     );
 
-            object time = null;
-           // if (GetTotalTime() < 60)
-                time = GetTotalTime() + " сек.";
-          //  else
-            //    time = GetTotalTime() / 60 + " мин.";
+            object time = GetTotalTime() + " сек.";
 
             table.Add(new ScreenResult(""));
             table.Add(new ScreenResult("Общий результат", TotalResult()));
@@ -238,6 +247,11 @@ namespace CSMU_Project
         {
             if (!CSMUFileMgr.ContainsKey(id))
                 throw new Exception("Key " + id + " not found.");
+
+            if ((endResponce + 1) == CSMUFileMgr.Count)
+                NextQst.Content = "Завершить.";
+
+            endResponce++;
 
             int Wrong = 0;
 
@@ -357,7 +371,6 @@ namespace CSMU_Project
                 Text = quest,
                 TextAlignment = TextAlignment.Left,
                 Height = 45,
-                //Width = box.Width - 100
             };
 
             Image img = new Image()
@@ -398,7 +411,8 @@ namespace CSMU_Project
                     Text = ItemText,
                     TextAlignment = TextAlignment.Left,
                     Height = 32,
-                    Width = box.Width
+                    Width = box.Width,
+                    Visibility = System.Windows.Visibility.Hidden
                 };
 
                 panel.Children.Add(img);
@@ -521,6 +535,9 @@ namespace CSMU_Project
 
             string[] data = File.ReadAllLines(file);
 
+            if (data[data.Length - 1] == string.Empty)
+                Array.Resize(ref data, data.Length - 1);
+
             if (data.Length < 2)
                 throw new Exception("File is empty.");
 
@@ -626,7 +643,7 @@ namespace CSMU_Project
             List<string> row = new List<string>();
 
             foreach (string r in str.Split(';'))
-                row.Add(r);
+                row.Add(r);//Desecurity(r));
 
             return row;
         }

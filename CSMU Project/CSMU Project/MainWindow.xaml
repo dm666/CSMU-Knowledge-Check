@@ -87,7 +87,8 @@
                             Margin="222,356,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
-                            Content="Выйти" />
+                            Content="Выйти" 
+                            Click="Exit"/>
                 </Grid>
             </TabItem>
         </TabControl>
