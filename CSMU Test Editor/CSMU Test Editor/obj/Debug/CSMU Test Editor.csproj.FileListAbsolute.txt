@@ -1,0 +1,19 @@
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\bin\Debug\CSMU Test Editor.exe
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\bin\Debug\CSMU Test Editor.pdb
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\bin\Debug\Elysium.dll
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\bin\Debug\Microsoft.Expression.Drawing.dll
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\bin\Debug\Microsoft.Windows.Shell.dll
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\bin\Debug\Elysium.pdb
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\bin\Debug\Elysium.xml
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\bin\Debug\Microsoft.Windows.Shell.pdb
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\CSMU Test Editor.csprojResolveAssemblyReference.cache
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\MainWindow.baml
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\App.baml
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\MainWindow.g.cs
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\App.g.cs
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\CSMU Test Editor_MarkupCompile.cache
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\CSMU Test Editor.g.resources
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\CSMU_Test_Editor.Properties.Resources.resources
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\CSMU Test Editor.csproj.GenerateResource.Cache
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\CSMU Test Editor.exe
+D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\CSMU Test Editor.pdb

@@ -3,11 +3,21 @@
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:metro="http://schemas.codeplex.com/elysium"
               xmlns:params="http://schemas.codeplex.com/elysium/params"
-              params:Design.Theme="Dark"
+              Title="MainWindow"
+              Width="725"
+              Height="550"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
-              Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+              params:Design.Theme="Dark">
+
+    <Grid Name="mainGrid">
+        <Menu>
+            <MenuItem Name="_file" Header="File">
+                <MenuItem Click="CreateNewFile" Header="New file" />
+                <MenuItem Click="OpenFile" Header="Open file" />
+                <MenuItem Click="SaveFile" Header="Save file" />
+            </MenuItem>
+        </Menu>
+
     </Grid>
 </metro:Window>
