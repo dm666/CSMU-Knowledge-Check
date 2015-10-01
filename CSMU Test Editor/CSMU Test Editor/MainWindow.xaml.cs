@@ -25,55 +25,164 @@ namespace CSMU_Test_Editor
             InitializeComponent();
         }
 
-        private enum EditorMode
+        List<CAnswer> gridFields;
+        List<string> quests, currentQuest;
+
+        private void WndLoaded(object sender, RoutedEventArgs e)
         {
-            Create = 1,
-            Edit = 2
+            Label[] fields = new Label[] 
+            {
+                QType,
+                QLabel,
+                HeadNOC,
+                AcI,
+                FName,
+                NQList,
+                ELAcI,
+                ELHeadNoc,
+                ELQType,
+                ELQuest
+            };
+
+            for (int i = 0; i < fields.Length; i++)
+                fields[i].Foreground = Elysium.AccentBrushes.Blue;
+
+            // only quest
+            quests = new List<string>();
+
+            // all qst data: type, quest, answers etc..
+            currentQuest = new List<string>();
         }
 
-        private void CreateNewFile(object sender, RoutedEventArgs e)
+        private void SelectQuestType(object sender, SelectionChangedEventArgs e)
         {
-            // make UI for creating mode
-            LoadingUI(EditorMode.Create);
+            var comboBox = sender as ComboBox;
+
+            switch (comboBox.SelectedIndex)
+            {
+                case 0:
+                case 1:
+                case 2:
+                    HeadNOC.Content = "Кол-во правильных ответов";
+                    AcI.Content = "Количество ответов";
+                    if (grid.Visibility != System.Windows.Visibility.Visible)
+                        grid.Visibility = System.Windows.Visibility.Visible;
+                    if (img.Visibility == System.Windows.Visibility.Visible)
+                        img.Visibility = System.Windows.Visibility.Collapsed;
+                    break;
+                case 3:
+                    HeadNOC.Content = "Путь к изображению";
+                    AcI.Content = "Ответ";
+                    if (grid.Visibility != System.Windows.Visibility.Collapsed)
+                        grid.Visibility = System.Windows.Visibility.Collapsed;
+                    if (img.Visibility != System.Windows.Visibility.Visible)
+                        img.Visibility = System.Windows.Visibility.Visible;
+                    break;
+            }
         }
 
-        private void OpenFile(object sender, RoutedEventArgs e)
+        private void MakeAnswersFields(int count)
         {
-            // make UI for editing mode
-            LoadingUI(EditorMode.Edit);
+            if (count <= 1)
+            {
+                MessageBox.Show("Нужно добавить минимум 2 ответа.");
+                return;
+            }
+
+            gridFields = new List<CAnswer>();
+
+            for (int i = 1; i <= count; i++)
+            {
+                CAnswer _t = new CAnswer();
+                _t.emptyField = i.ToString();
+                gridFields.Add(_t);
+            }
+
+            grid.ItemsSource = gridFields;
         }
 
-        private void SaveFile(object sender, RoutedEventArgs e)
+        private void AddFields(object sender, KeyEventArgs e)
         {
-            MessageBox.Show("Save!");
+            if (e.Key == Key.Enter)
+            {
+                int reserved;
+
+                if (int.TryParse(TAcImg.Text, out reserved))
+                {
+                    if (gridFields != null)
+                        gridFields.Clear();
+
+                    MakeAnswersFields(reserved);
+                }
+            }
         }
 
-        private void LoadingUI(EditorMode mode)
+        private void RemoveLast(object sender, RoutedEventArgs e)
         {
-            string userInterface = mode == EditorMode.Create ? "Development.xaml" : "Edit.xaml";
 
-            if (!File.Exists(userInterface))
-                throw new Exception("Can't load UI. Aborted.");
-
-            var obj = mainGrid.FindName(mode == EditorMode.Create ? "editWork" : "developWork") as UIElement;
-
-            if (obj != null)
-                mainGrid.Children.Remove(obj);
-
-            FileStream stream = new FileStream(userInterface, FileMode.Open);
-
-            Grid workspace = new Grid();
-            workspace.Name = mode == EditorMode.Create ? "developWork" : "editWork";
-            workspace = System.Windows.Markup.XamlReader.Load(stream) as Grid;
-
-            mainGrid.Children.Add(workspace);
-
-            stream.Close();
         }
 
-        private bool Save()
+        private void ApplyCurrentQuest(object sender, RoutedEventArgs e)
         {
-            return true;
+            MessageBox.Show(GetAnswers());
+            MessageBox.Show(GetCorrectAnswers());
+           // string currentQuest = string.Format("");
+        }
+
+        private void SaveCurrentTest(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        // functions
+
+        // Security test from students :D
+        private string Security(byte[] array)
+        {
+            byte[] arrOfStr = new byte[array.Length];
+
+            for (int i = 0; i < arrOfStr.Length; i++)
+                arrOfStr[i] = (byte)(array[i] ^ 5);
+
+            return Encoding.ASCII.GetString(arrOfStr);
+        }
+
+        private class CAnswer
+        {
+            public string emptyField { get; set; }
+        }
+
+        private string GetAnswers()
+        {
+            string answers = "";
+
+
+            for (int i = 0; i < grid.Items.Count; i++)
+            {
+                DataGridRow row = (DataGridRow)grid.ItemContainerGenerator.ContainerFromIndex(i);
+
+                for (int z = 0; z < 1; z++)
+                {
+                    TextBlock bl = grid.Columns[z].GetCellContent(row) as TextBlock;
+                    answers += bl.Text + ";";
+                }
+            }
+
+            return answers;
+        }
+
+        private string GetCorrectAnswers()
+        {
+            string corrects = "";
+
+            for (int i = 0; i < grid.SelectedItems.Count; i++)
+            {
+                CAnswer a = (CAnswer)grid.SelectedItems[i];
+
+                corrects += a.emptyField + ";";
+            }
+
+            return corrects.TrimEnd(';');
         }
     }
 }

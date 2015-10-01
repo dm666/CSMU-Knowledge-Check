@@ -1,0 +1,61 @@
+﻿<metro:Window Title= "BLA">
+    <Grid>
+        <Button Width="211"
+                Height="29"
+                Margin="116,182,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Content="Button" />
+        <TextBox Width="211"
+                 Height="34"
+                 Margin="116,89,0,0"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Top"
+                 Text="TextBox"
+                 TextWrapping="Wrap" />
+        <TextBox Width="211"
+                 Height="31"
+                 Margin="116,136,0,0"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Top"
+                 Text="TextBox"
+                 TextWrapping="Wrap" />
+        <ComboBox Width="225"
+                  Height="32"
+                  Margin="32,25,0,0"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top" />
+        <CheckBox Width="151"
+                  Height="37"
+                  Margin="61,267,0,0"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  Content="CheckBox" />
+        <TabControl Width="160"
+                    Height="270"
+                    Margin="337,34,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5" />
+            </TabItem>
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5" />
+            </TabItem>
+        </TabControl>
+        <Button Width="116"
+                Height="38"
+                Margin="175,266,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Content="Button" />
+        <TextBlock Width="43"
+                   Height="75"
+                   Margin="32,136,0,0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Text="TextBlock"
+                   TextWrapping="Wrap" />
+
+    </Grid>
+</metro:Window>

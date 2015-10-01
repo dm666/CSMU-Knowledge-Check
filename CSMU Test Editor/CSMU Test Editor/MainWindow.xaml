@@ -5,19 +5,266 @@
               xmlns:params="http://schemas.codeplex.com/elysium/params"
               Title="MainWindow"
               Width="725"
-              Height="550"
+              Height="392"
+              Loaded="WndLoaded"
               params:Design.AccentBrush="{x:Static metro:AccentBrushes.Blue}"
               params:Design.ContrastBrush="White"
               params:Design.Theme="Dark">
 
     <Grid Name="mainGrid">
-        <Menu>
-            <MenuItem Name="_file" Header="File">
-                <MenuItem Click="CreateNewFile" Header="New file" />
-                <MenuItem Click="OpenFile" Header="Open file" />
-                <MenuItem Click="SaveFile" Header="Save file" />
-            </MenuItem>
-        </Menu>
-
+        <TabControl x:Name="tabItemNew"
+                    Width="717"
+                    Height="362"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+            <TabItem Header="Новый тест">
+                <Grid Margin="0,1,0,-1">
+                    <ComboBox x:Name="CQType"
+                              Width="178"
+                              Height="29"
+                              Margin="10,43,0,0"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Top"
+                              SelectionChanged="SelectQuestType">
+                        <ComboBoxItem>Одиночный</ComboBoxItem>
+                        <ComboBoxItem>Множественный</ComboBoxItem>
+                        <ComboBoxItem>Выбрать изображения</ComboBoxItem>
+                        <ComboBoxItem>Ответить самостоятельно</ComboBoxItem>
+                    </ComboBox>
+                    <TextBox x:Name="TQuest"
+                             Width="178"
+                             Height="36"
+                             Margin="10,119,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             TextWrapping="Wrap" />
+                    <TextBox x:Name="THead"
+                             Width="178"
+                             Height="36"
+                             Margin="10,193,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             TextWrapping="Wrap" />
+                    <TextBox x:Name="TAcImg"
+                             Width="178"
+                             Height="36"
+                             Margin="10,265,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             KeyDown="AddFields"
+                             TextWrapping="Wrap" />
+                    <DataGrid Name="grid"
+                              Width="276"
+                              Height="194"
+                              Margin="243,43,0,0"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Top"
+                              AutoGenerateColumns="True"
+                              CanUserAddRows="False"
+                              Visibility="Collapsed">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="268"
+                                                Binding="{Binding Path=emptyField,
+                                                                  Mode=TwoWay}"
+                                                Header="Ответы" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <TextBox x:Name="TFileName"
+                             Width="178"
+                             Height="35"
+                             Margin="529,43,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             TextWrapping="Wrap" />
+                    <Image Name="img"
+                           Width="276"
+                           Height="194"
+                           Margin="243,43,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           Visibility="Collapsed" />
+                    <Button x:Name="BQDelPrev"
+                            Width="143"
+                            Height="35"
+                            Margin="243,266,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Click="RemoveLast"
+                            Content="Удалить выбранный" />
+                    <Button x:Name="BQApply"
+                            Width="142"
+                            Height="35"
+                            Margin="402,266,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Click="ApplyCurrentQuest"
+                            Content="Добавить тест" />
+                    <Button x:Name="BQSave"
+                            Width="115"
+                            Height="35"
+                            Margin="567,266,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Click="SaveCurrentTest"
+                            Content="Сохранить тест" />
+                    <Label x:Name="QType"
+                           Width="178"
+                           Height="28"
+                           Margin="10,10,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           HorizontalContentAlignment="Center"
+                           Content="Тип вопроса" />
+                    <Label x:Name="QLabel"
+                           Width="178"
+                           Height="28"
+                           Margin="10,80,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           HorizontalContentAlignment="Center"
+                           Content="Вопрос" />
+                    <Label x:Name="HeadNOC"
+                           Width="178"
+                           Height="28"
+                           Margin="10,160,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           HorizontalContentAlignment="Center"
+                           Content="" />
+                    <Label x:Name="AcI"
+                           Width="178"
+                           Height="28"
+                           Margin="10,234,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           HorizontalContentAlignment="Center"
+                           Content="" />
+                    <Label x:Name="FName"
+                           Width="178"
+                           Height="28"
+                           Margin="529,10,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           HorizontalContentAlignment="Center"
+                           Content="Наименование файла" />
+                    <ListBox x:Name="previewBox"
+                             Width="178"
+                             Height="144"
+                             Margin="529,105,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top" />
+                    <Label x:Name="NQList"
+                           Width="178"
+                           Height="25"
+                           Margin="529,80,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           HorizontalContentAlignment="Center"
+                           Content="Список вопросов" />
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabItemEdit" Header="Редактирование">
+                <Grid>
+                    <ListBox x:Name="EListBox"
+                             Width="134"
+                             Height="314"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top" />
+                    <DataGrid Name="grd2"
+                              Width="344"
+                              Height="226"
+                              Margin="363,10,0,0"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Top"
+                              Visibility="Visible" />
+                    <Image Width="344"
+                           Height="226"
+                           Margin="363,10,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top" />
+                    <TextBox x:Name="ETQuest"
+                             Width="152"
+                             Height="31"
+                             Margin="139,94,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             TextWrapping="Wrap" />
+                    <TextBox x:Name="ETHeadNoc"
+                             Width="152"
+                             Height="31"
+                             Margin="139,164,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             TextWrapping="Wrap" />
+                    <TextBox x:Name="ETAcI"
+                             Width="152"
+                             Height="31"
+                             Margin="139,241,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             TextWrapping="Wrap" />
+                    <Label x:Name="ELQType"
+                           Width="152"
+                           Height="27"
+                           Margin="139,0,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           HorizontalContentAlignment="Center"
+                           Content="Тип вопроса" />
+                    <Label x:Name="ELQuest"
+                           Width="152"
+                           Height="27"
+                           Margin="139,62,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           HorizontalContentAlignment="Center"
+                           Content="Вопрос" />
+                    <Label x:Name="ELHeadNoc"
+                           Width="152"
+                           Height="27"
+                           Margin="139,132,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           HorizontalContentAlignment="Center"
+                           Content="Кол-во" />
+                    <Label x:Name="ELAcI"
+                           Width="152"
+                           Height="27"
+                           Margin="139,209,0,0"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           HorizontalContentAlignment="Center"
+                           Content="Ответ" />
+                    <Button x:Name="EDelete"
+                            Width="113"
+                            Height="35"
+                            Margin="363,260,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Content="Удалить" />
+                    <Button x:Name="EAdd"
+                            Width="108"
+                            Height="35"
+                            Margin="491,260,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Content="Добавить" />
+                    <Button x:Name="ESave"
+                            Width="94"
+                            Height="35"
+                            Margin="613,260,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Content="Сохранить" />
+                    <TextBox x:Name="ETQuest_Copy"
+                             Width="152"
+                             Height="31"
+                             Margin="139,32,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             TextWrapping="Wrap" />
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </metro:Window>
