@@ -44,6 +44,7 @@
                              Margin="10,193,0,0"
                              HorizontalAlignment="Left"
                              VerticalAlignment="Top"
+                             TextChanged="PreviewImage"
                              TextWrapping="Wrap" />
                     <TextBox x:Name="TAcImg"
                              Width="178"
@@ -51,7 +52,7 @@
                              Margin="10,265,0,0"
                              HorizontalAlignment="Left"
                              VerticalAlignment="Top"
-                             KeyDown="AddFields"
+                             TextChanged="AddFields"
                              TextWrapping="Wrap" />
                     <DataGrid Name="grid"
                               Width="276"
@@ -59,7 +60,7 @@
                               Margin="243,43,0,0"
                               HorizontalAlignment="Left"
                               VerticalAlignment="Top"
-                              AutoGenerateColumns="True"
+                              AutoGenerateColumns="false"
                               CanUserAddRows="False"
                               Visibility="Collapsed">
                         <DataGrid.Columns>

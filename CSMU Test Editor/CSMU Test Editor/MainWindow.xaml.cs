@@ -26,7 +26,9 @@ namespace CSMU_Test_Editor
         }
 
         List<CAnswer> gridFields;
-        List<string> quests, currentQuest;
+        List<string> questsHead, questList;
+
+        private int currentIndex = -1;
 
         private void WndLoaded(object sender, RoutedEventArgs e)
         {
@@ -48,15 +50,17 @@ namespace CSMU_Test_Editor
                 fields[i].Foreground = Elysium.AccentBrushes.Blue;
 
             // only quest
-            quests = new List<string>();
+            questsHead = new List<string>();
 
             // all qst data: type, quest, answers etc..
-            currentQuest = new List<string>();
+            questList = new List<string>();
         }
 
         private void SelectQuestType(object sender, SelectionChangedEventArgs e)
         {
             var comboBox = sender as ComboBox;
+
+            currentIndex = comboBox.SelectedIndex;
 
             switch (comboBox.SelectedIndex)
             {
@@ -83,12 +87,6 @@ namespace CSMU_Test_Editor
 
         private void MakeAnswersFields(int count)
         {
-            if (count <= 1)
-            {
-                MessageBox.Show("Нужно добавить минимум 2 ответа.");
-                return;
-            }
-
             gridFields = new List<CAnswer>();
 
             for (int i = 1; i <= count; i++)
@@ -101,32 +99,21 @@ namespace CSMU_Test_Editor
             grid.ItemsSource = gridFields;
         }
 
-        private void AddFields(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                int reserved;
-
-                if (int.TryParse(TAcImg.Text, out reserved))
-                {
-                    if (gridFields != null)
-                        gridFields.Clear();
-
-                    MakeAnswersFields(reserved);
-                }
-            }
-        }
-
         private void RemoveLast(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void ApplyCurrentQuest(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(GetAnswers());
-            MessageBox.Show(GetCorrectAnswers());
-           // string currentQuest = string.Format("");
+            string quest = TQuest.Text;
+            string header = THead.Text;
+            int outdate;
+
+            string questToApply = ApplyCurrentTest(quest, header, 
+                int.TryParse(TAcImg.Text, out outdate) == true ? null : TAcImg.Text);
+
+            questList.Add(questToApply);
         }
 
         private void SaveCurrentTest(object sender, RoutedEventArgs e)
@@ -156,7 +143,6 @@ namespace CSMU_Test_Editor
         {
             string answers = "";
 
-
             for (int i = 0; i < grid.Items.Count; i++)
             {
                 DataGridRow row = (DataGridRow)grid.ItemContainerGenerator.ContainerFromIndex(i);
@@ -183,6 +169,58 @@ namespace CSMU_Test_Editor
             }
 
             return corrects.TrimEnd(';');
+        }
+
+        private string ApplyCurrentTest(string quest, string headerOrCorrected, object answer = null)
+        {
+            string complete = "";
+
+            if (currentIndex != 3)
+                complete = string.Format("{0};{1};{2};{3};{4}", (currentIndex + 1), quest,
+                    headerOrCorrected, GetAnswers(), GetCorrectAnswers());
+            else
+                complete = string.Format("{0};{1};{2};{3}", 4, quest, headerOrCorrected, answer);
+
+            return complete.Remove(complete.Length - 2, 1);
+        }
+
+        private void PreviewImage(object sender, TextChangedEventArgs e)
+        {
+            if (currentIndex == 3)
+            {
+                if (string.IsNullOrEmpty(THead.Text))
+                    img.Source = null;
+                else if (!File.Exists(THead.Text))
+                    img.Source = new BitmapImage(
+                        new Uri(@"C:\users\dm666\desktop\nf.png", UriKind.RelativeOrAbsolute));
+                else
+                    img.Source = new BitmapImage(new Uri(THead.Text));
+            }
+        }
+
+        private void AddFields(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(TAcImg.Text))
+                if (gridFields != null)
+                {
+                    gridFields.Clear();
+                    // to do: need update ItemsSource!
+                    CollectionViewSource.GetDefaultView(gridFields).Refresh();
+                    return;
+                }
+
+            if (currentIndex != 3)
+            {
+                int reserved;
+
+                if (int.TryParse(TAcImg.Text, out reserved))
+                {
+                    if (gridFields != null)
+                        gridFields.Clear();
+
+                    MakeAnswersFields(reserved);
+                }
+            }
         }
     }
 }
