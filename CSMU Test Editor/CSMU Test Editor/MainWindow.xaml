@@ -45,7 +45,7 @@
                              HorizontalAlignment="Left"
                              VerticalAlignment="Top"
                              TextChanged="PreviewImage"
-                             TextWrapping="Wrap" />
+                             TextWrapping="Wrap" IsEnabled="False" />
                     <TextBox x:Name="TAcImg"
                              Width="178"
                              Height="36"
@@ -53,7 +53,7 @@
                              HorizontalAlignment="Left"
                              VerticalAlignment="Top"
                              TextChanged="AddFields"
-                             TextWrapping="Wrap" />
+                             TextWrapping="Wrap" IsEnabled="False" />
                     <DataGrid Name="grid"
                               Width="276"
                               Height="194"

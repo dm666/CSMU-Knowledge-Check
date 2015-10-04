@@ -83,6 +83,12 @@ namespace CSMU_Test_Editor
                         img.Visibility = System.Windows.Visibility.Visible;
                     break;
             }
+
+            if (!THead.IsEnabled)
+                THead.IsEnabled = true;
+
+            if (!TAcImg.IsEnabled)
+                TAcImg.IsEnabled = true;
         }
 
         private void MakeAnswersFields(int count)
@@ -101,7 +107,13 @@ namespace CSMU_Test_Editor
 
         private void RemoveLast(object sender, RoutedEventArgs e)
         {
-            
+            int deleted = previewBox.SelectedIndex;
+
+            if (deleted != -1)
+            {
+                questList.RemoveAt(deleted);
+                previewBox.Items.RemoveAt(deleted);
+            }
         }
 
         private void ApplyCurrentQuest(object sender, RoutedEventArgs e)
@@ -113,7 +125,9 @@ namespace CSMU_Test_Editor
             string questToApply = ApplyCurrentTest(quest, header, 
                 int.TryParse(TAcImg.Text, out outdate) == true ? null : TAcImg.Text);
 
-            questList.Add(questToApply);
+            previewBox.Items.Add(questToApply.Split(';')[1]);
+
+            questList.Add(Security(Encoding.ASCII.GetBytes(questToApply)));
         }
 
         private void SaveCurrentTest(object sender, RoutedEventArgs e)
@@ -196,6 +210,13 @@ namespace CSMU_Test_Editor
                 else
                     img.Source = new BitmapImage(new Uri(THead.Text));
             }
+            else
+            {
+                int check;
+
+                if (!int.TryParse(THead.Text, out check))
+                    THead.Text = string.Empty;
+            }
         }
 
         private void AddFields(object sender, TextChangedEventArgs e)
@@ -220,6 +241,8 @@ namespace CSMU_Test_Editor
 
                     MakeAnswersFields(reserved);
                 }
+                else
+                    TAcImg.Text = string.Empty;
             }
         }
     }
