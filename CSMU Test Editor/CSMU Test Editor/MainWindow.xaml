@@ -37,6 +37,7 @@
                              Margin="10,119,0,0"
                              HorizontalAlignment="Left"
                              VerticalAlignment="Top"
+                             IsEnabled="False"
                              TextWrapping="Wrap" />
                     <TextBox x:Name="THead"
                              Width="178"
@@ -44,16 +45,18 @@
                              Margin="10,193,0,0"
                              HorizontalAlignment="Left"
                              VerticalAlignment="Top"
+                             IsEnabled="False"
                              TextChanged="PreviewImage"
-                             TextWrapping="Wrap" IsEnabled="False" />
+                             TextWrapping="Wrap" />
                     <TextBox x:Name="TAcImg"
                              Width="178"
                              Height="36"
                              Margin="10,265,0,0"
                              HorizontalAlignment="Left"
                              VerticalAlignment="Top"
+                             IsEnabled="False"
                              TextChanged="AddFields"
-                             TextWrapping="Wrap" IsEnabled="False" />
+                             TextWrapping="Wrap" />
                     <DataGrid Name="grid"
                               Width="276"
                               Height="194"

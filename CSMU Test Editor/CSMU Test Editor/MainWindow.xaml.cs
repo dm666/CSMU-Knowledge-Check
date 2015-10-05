@@ -84,6 +84,9 @@ namespace CSMU_Test_Editor
                     break;
             }
 
+            if (!TQuest.IsEnabled)
+                TQuest.IsEnabled = true;
+
             if (!THead.IsEnabled)
                 THead.IsEnabled = true;
 
@@ -132,7 +135,18 @@ namespace CSMU_Test_Editor
 
         private void SaveCurrentTest(object sender, RoutedEventArgs e)
         {
+            if (TFileName.Text.Length < 1)
+            {
+                MessageBox.Show("Введите название файла.");
+                FocusManager.SetFocusedElement(FocusManager.GetFocusScope(TFileName), TFileName);
+                return;
+            }
 
+            using (StreamWriter wr = File.AppendText(TFileName.Text + ".csmu"))
+            {
+                for (int i = 0; i < questList.Count; i++)
+                    wr.WriteLine(questList[i]);
+            }
         }
 
         // functions
