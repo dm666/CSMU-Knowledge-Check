@@ -135,10 +135,26 @@ namespace CSMU_Test_Editor
 
         private void SaveCurrentTest(object sender, RoutedEventArgs e)
         {
-            if (TFileName.Text.Length < 1)
+            TextBox[] boxes = new TextBox[]
             {
-                MessageBox.Show("Введите название файла.");
-                FocusManager.SetFocusedElement(FocusManager.GetFocusScope(TFileName), TFileName);
+                TQuest,
+                THead,
+                TAcImg,
+                TFileName
+            };
+
+            for (int x = 0; x < boxes.Length; x++)
+            {
+                if (boxes[x].Text.Length < 1)
+                {
+                    MessageBox.Show("Заполните все поля.");
+                    return;
+                }
+            }
+
+            if (questList.Count < 1)
+            {
+                MessageBox.Show("Невозможно создать пустое тестирование.");
                 return;
             }
 
@@ -226,10 +242,18 @@ namespace CSMU_Test_Editor
             }
             else
             {
+                if (THead.Text == "0")
+                    THead.Text = currentIndex == 0 ? "1" : "2";
+
                 int check;
 
                 if (!int.TryParse(THead.Text, out check))
                     THead.Text = string.Empty;
+                else
+                {
+                    if (check > int.Parse(TAcImg.Text))
+                        THead.Text = "1";
+                }
             }
         }
 
@@ -239,7 +263,7 @@ namespace CSMU_Test_Editor
                 if (gridFields != null)
                 {
                     gridFields.Clear();
-                    // to do: need update ItemsSource!
+                    // update ItemsSource
                     CollectionViewSource.GetDefaultView(gridFields).Refresh();
                     return;
                 }
@@ -252,6 +276,9 @@ namespace CSMU_Test_Editor
                 {
                     if (gridFields != null)
                         gridFields.Clear();
+
+                    if (reserved > 10)
+                        reserved = 10;
 
                     MakeAnswersFields(reserved);
                 }
