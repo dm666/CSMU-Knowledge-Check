@@ -17,5 +17,3 @@ D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Edito
 D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\CSMU Test Editor.csproj.GenerateResource.Cache
 D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\CSMU Test Editor.exe
 D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\CSMU Test Editor.pdb
-D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\Edit.baml
-D:\Nick Files\CSMU Testing\CSMU-Knowledge-Check\CSMU Test Editor\CSMU Test Editor\obj\Debug\Edit.g.cs

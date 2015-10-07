@@ -40,10 +40,8 @@ namespace CSMU_Test_Editor
                 AcI,
                 FName,
                 NQList,
-                ELAcI,
-                ELHeadNoc,
-                ELQType,
-                ELQuest
+                ELFindQuest,
+                ELQuestList
             };
 
             for (int i = 0; i < fields.Length; i++)
@@ -285,6 +283,17 @@ namespace CSMU_Test_Editor
                 else
                     TAcImg.Text = string.Empty;
             }
+        }
+
+        private void EditorSelection(object sender, SelectionChangedEventArgs e)
+        {
+            this.Width = SelectLoadedQuest.IsSelected ? 400 : 725;
+        }
+
+        private void CreaterSelection(object sender, SelectionChangedEventArgs e)
+        {
+            if (tabItemCreate.IsSelected)
+                this.Width = 725;
         }
     }
 }
