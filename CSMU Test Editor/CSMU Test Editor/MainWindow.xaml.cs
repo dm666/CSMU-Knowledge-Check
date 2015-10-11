@@ -11,7 +11,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Data;
 using System.IO;
+using Microsoft.Win32;
 
 namespace CSMU_Test_Editor
 {
@@ -176,6 +178,11 @@ namespace CSMU_Test_Editor
             return Encoding.ASCII.GetString(arrOfStr);
         }
 
+        private string Desecurity(string encrypted)
+        {
+            return Security((Encoding.ASCII.GetBytes(encrypted)));
+        }
+
         private class CAnswer
         {
             public string emptyField { get; set; }
@@ -294,6 +301,237 @@ namespace CSMU_Test_Editor
         {
             if (tabItemCreate.IsSelected)
                 this.Width = 725;
+        }
+
+        public enum QuestType
+        {
+            Single = 1,
+            Multiple,
+            ChoiceImage,
+            TextingImage
+        }
+
+        public Dictionary<int, CSMUFile> CSMUFileMgr;
+        private CSMUFile CFile;
+
+        public class CSMUFile
+        {
+            public CSMUFile()
+            {
+                Answers = new List<string>();
+                corrected = new List<string>();
+            }
+
+            public QuestType questType { get; set; }
+            public string Quest { get; set; }
+            public int NumberOfCorrect { get; set; }
+            public string HeaderImage { get; set; }
+            public string ImageAnswer { get; set; }
+
+            public List<string> Answers { get; set; }
+            public List<string> corrected { get; set; }
+
+            public int Time { get; set; }
+        }
+
+        public void LoadingQuery(string file)
+        {
+            CSMUFileMgr = new Dictionary<int, CSMUFile>();
+
+            string[] data = File.ReadAllLines(file)
+                .Where(empty => !string.IsNullOrEmpty(empty)).ToArray();
+
+            if (data.Length < 1)
+                throw new Exception("File is empty.");
+
+            for (int rowId = 0; rowId < data.Length; rowId++)
+            {
+                List<string> rowData = GetRowData(data[rowId]);
+
+                CFile = new CSMUFile();
+
+                int firstIndex = 0;
+
+                // get quest type
+                int iType = int.Parse(rowData[0]);
+
+                // set type
+                switch (iType)
+                {
+                    case 1: CFile.questType = QuestType.Single; break;
+                    case 2: CFile.questType = QuestType.Multiple; break;
+                    case 3: CFile.questType = QuestType.ChoiceImage; break;
+                    case 4: CFile.questType = QuestType.TextingImage; break;
+                    default:
+                        throw new Exception("Unknown type.");
+                }
+
+                // get quest
+                CFile.Quest = rowData[1];
+
+                if (iType == 4) // set image..
+                    CFile.HeaderImage = rowData[2];
+                else          // or number of correct
+                {
+                    CFile.NumberOfCorrect = int.Parse(rowData[2]);
+
+                    // get first index 
+                    firstIndex = rowData.Count - CFile.NumberOfCorrect;
+                }
+
+                // get last index
+                int lastIndex = rowData.Count - 1;
+
+                if (iType == 1)
+                {
+                    // add corrected to list
+                    CFile.corrected.Add(rowData[lastIndex]);
+
+                    // prepare answer's list
+                    // remove correct
+                    rowData.RemoveRange(lastIndex, 1);
+
+                    // remove first data such as type, quest, headerimage/numberofcorrect
+                    rowData.RemoveRange(0, 3);
+                }
+                else if (iType == 2 || iType == 3)
+                {
+                    // fill 
+                    for (int index = lastIndex; index >= firstIndex; index--)
+                        CFile.corrected.Add(rowData[index]);
+
+                    // prepare answer's list
+                    // remove correct
+                    rowData.RemoveRange(firstIndex, CFile.NumberOfCorrect);
+
+                    // remove first data such as type, quest, headerimage/numberofcorrect
+                    rowData.RemoveRange(0, 3);
+                }
+                else if (iType == 4) // set answer
+                    CFile.ImageAnswer = rowData[3];
+
+                // add to dictionary
+                CSMUFileMgr.Add(rowId, CFile);
+            }
+        }
+
+        private List<string> GetRowData(string str)
+        {
+            List<string> row = new List<string>();
+
+            foreach (string r in str.Split(';'))
+                row.Add(r);//Desecurity(r));
+
+            return row;
+        }
+
+        private void ChoosingQuestFromList(object sender, SelectionChangedEventArgs e)
+        {
+            if (ECListBox.SelectedIndex < 0)
+                return;
+
+            int index = ECListBox.SelectedIndex;
+
+            EdTQType.Text = ConvertTypeToStrValue(CSMUFileMgr[index].questType);
+            EdTQuest.Text = CSMUFileMgr[index].Quest;
+
+            if (CSMUFileMgr[index].questType != QuestType.TextingImage)
+            {
+                if (CSMUFileMgr[index].questType == QuestType.ChoiceImage)
+                {
+                    DataTable dt = new DataTable();
+                    dt.Columns.Add("Путь к изображению");
+                    dt.Columns.Add("Изображение", typeof(BitmapImage));
+
+                    for (int i = 0; i < CSMUFileMgr[index].Answers.Count; i++)
+                    {
+                        DataRow row = dt.NewRow();
+                        row[0] = CSMUFileMgr[index].Answers[i];
+
+                        BitmapImage img = new BitmapImage(new Uri(CSMUFileMgr[index].Answers[i]));
+                        row[1] = img;
+                    }
+
+                    editGrid.ItemsSource = dt.DefaultView;
+                }
+                else
+                {
+                    DataTable dt = new DataTable();
+                    dt.Columns.Add("Ответ");
+
+                    for (int i = 0; i < CSMUFileMgr[index].Answers.Count; i++)
+                    {
+                        DataRow row = dt.NewRow();
+                        row[0] = CSMUFileMgr[index].Answers[i];
+                    }
+
+                    editGrid.ItemsSource = dt.DefaultView;
+
+                    for (int z = 0; z < CSMUFileMgr[index].corrected.Count; z++)
+                        SelectionValue = CSMUFileMgr[index].corrected[z];
+                }
+
+                EdTAc.Text = CSMUFileMgr[index].Answers.Count.ToString();
+            }
+            else
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("Изображение", typeof(BitmapImage));
+
+                DataRow row = dt.NewRow();
+                BitmapImage img = new BitmapImage(new Uri(CSMUFileMgr[index].HeaderImage));
+                row[0] = img;
+
+                editGrid.ItemsSource = dt.DefaultView;
+
+                EdTAc.Text = CSMUFileMgr[index].ImageAnswer;
+            }
+        }
+
+        private string _selectedValue;
+        public string SelectionValue
+        {
+            get { return _selectedValue; }
+            set { _selectedValue = value; }
+        }
+
+        private void LoadSelectedFile(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+
+            dlg.Filter = "CSMU файлы (.csmu) | *.csmu";
+
+            if (dlg.ShowDialog() == true)
+            {
+                LoadingQuery(dlg.FileName);
+                LoadQuestsToList();
+            }
+        }
+
+        private string ConvertTypeToStrValue(QuestType t)
+        {
+            if (t == QuestType.Single)
+                return "1";
+            else if (t == QuestType.Multiple)
+                return "2";
+            else if (t == QuestType.ChoiceImage)
+                return "3";
+            else
+                return "4";
+        }
+
+        private void LoadQuestsToList()
+        {
+            if (CSMUFileMgr.Count < 1)
+                return;
+
+            for (int i = 0; i < CSMUFileMgr.Count; i++)
+            {
+                if (!CSMUFileMgr.ContainsKey(i))
+                    continue;
+
+                ECListBox.Items.Add(CSMUFileMgr[i].Quest);
+            }
         }
     }
 }

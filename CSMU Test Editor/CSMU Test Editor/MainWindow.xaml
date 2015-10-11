@@ -177,17 +177,20 @@
                                 SelectionChanged="EditorSelection">
                         <TabItem Name="SelectLoadedQuest" Header="Выбор вопроса">
                             <Grid Height="266" VerticalAlignment="Top">
-                                <ListBox Width="242"
+                                <ListBox x:Name="ECListBox"
+                                         Width="242"
                                          Height="234"
                                          Margin="4,30,0,0"
                                          HorizontalAlignment="Left"
-                                         VerticalAlignment="Top" />
+                                         VerticalAlignment="Top"
+                                         SelectionChanged="ChoosingQuestFromList" />
                                 <Button x:Name="LoadNewTest"
                                         Width="139"
                                         Height="31"
                                         Margin="251,112,0,0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
+                                        Click="LoadSelectedFile"
                                         Content="Загрузить тест"
                                         RenderTransformOrigin="0.496,-0.355" />
                                 <TextBox x:Name="ETFindQuest"
@@ -237,7 +240,73 @@
                             </Grid>
                         </TabItem>
                         <TabItem Name="EditLoadedQuest" Header="Редактирование">
-                            <Grid />
+                            <Grid>
+                                <Label x:Name="EdLQtype"
+                                       Width="149"
+                                       Height="29"
+                                       Margin="10,10,0,0"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       Content="Label" />
+                                <TextBox x:Name="EdTQType"
+                                         Width="149"
+                                         Height="35"
+                                         Margin="10,44,0,0"
+                                         HorizontalAlignment="Left"
+                                         VerticalAlignment="Top"
+                                         Text="TextBox"
+                                         TextWrapping="Wrap" />
+                                <Label x:Name="EdLQuest"
+                                       Width="149"
+                                       Height="29"
+                                       Margin="10,88,0,0"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       Content="Label" />
+                                <TextBox x:Name="EdTQuest"
+                                         Width="149"
+                                         Height="35"
+                                         Margin="10,122,0,0"
+                                         HorizontalAlignment="Left"
+                                         VerticalAlignment="Top"
+                                         Text="TextBox"
+                                         TextWrapping="Wrap" />
+                                <Label x:Name="EdLAc"
+                                       Width="149"
+                                       Height="29"
+                                       Margin="10,173,0,0"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       Content="Label" />
+                                <TextBox x:Name="EdTAc"
+                                         Width="149"
+                                         Height="35"
+                                         Margin="10,207,0,0"
+                                         HorizontalAlignment="Left"
+                                         VerticalAlignment="Top"
+                                         Text="TextBox"
+                                         TextWrapping="Wrap" />
+                                <Image Width="275"
+                                       Height="194"
+                                       Margin="184,8,0,0"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       Visibility="Collapsed" />
+                                <Button x:Name="EBSave"
+                                        Width="130"
+                                        Height="36"
+                                        Margin="464,206,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        Content="Button" />
+                                <DataGrid x:Name="editGrid"
+                                          Width="280"
+                                          Height="221"
+                                          Margin="179,21,0,0"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Top"
+                                          SelectedValue="{Binding SelectionValue}" />
+                            </Grid>
                         </TabItem>
                     </TabControl>
                 </Grid>
